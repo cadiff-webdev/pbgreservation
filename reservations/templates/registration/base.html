@@ -1,0 +1,68 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	
+	<title>{% block title %} PBG Booking Portal{% endblock %}</title>
+
+	<!-- Google font -->
+	<link href="https://fonts.googleapis.com/css?family=Cabin:400,700" rel="stylesheet">
+
+	<!-- Bootstrap -->
+	<link rel="stylesheet" type="text/css" href="{% static 'reservations/css/bootstrap.min.css' %}">
+
+  <!-- Font Icon -->
+  <link rel="stylesheet" href="{% static 'reservations/fonts/material-icon/css/material-design-iconic-font.min.css' %}">
+
+	<!-- Custom stlylesheet -->
+    
+	<link rel="stylesheet" type="text/css" href="{% static 'reservations/css/style.css' %}">
+	<link rel="stylesheet" href="{% static 'reservations/css/login.css' %}">
+	<link rel="stylesheet" href="{% static 'reservations/css/updates.css' %}">
+
+	<!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+	<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+	<!--[if lt IE 9]>
+		  <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+		  <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+		<![endif]-->
+
+	<style type="text/css">
+		a{
+			display: block;
+			color:#580034;
+			margin-top: 3px;
+		}
+	</style>
+</head>
+
+<body>
+	<header class="header py-3 fixed-top">
+    <div class="row flex-nowrap justify-content-between align-items-center">
+      <div class="col-2 ml-2">
+        <img class="logo-image" src="{% static 'reservations/images/pbglogo.mini.png' %}">
+      </div>
+      <div class="col-8 text-center">
+        <a class="header-logo text-dark" href="#">PBG BOOKING PORTAL</a>
+      </div>
+      <div class="col-2 d-flex justify-content-end align-items-center">
+        <a class="btn btn-sm btn-outline-secondary" href="#">Sign up</a>
+        <a class="btn btn-sm btn-outline-secondary" href="#">Admin</a>
+      </div>
+    </div>
+  </header>
+
+  <div class="main">
+		<div class="row">
+			<div class="col-md-12">
+				{% block content %}{% endblock %}  	
+		 	</div>
+     </div>
+	</div>
+</body>
+	<script src="{% static 'reservations/vendor/jquery/jquery-3.2.1.min.js' %}"></script>
+</html>

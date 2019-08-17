@@ -1,0 +1,54 @@
+	{% extends "reservations/base.html" %}
+{% block title %}PBG Homepage{% endblock%}
+{% block topnav%}
+	<nav aria-label="breadcrumb">
+	  <ol class="breadcrumb">
+	    <li class="breadcrumb-item"><a href="{% url 'reservations:accomodationform' %}">Accomodation</a></li>
+	    <li class="breadcrumb-item active" aria-current="page"><a href="{% url 'reservations:transportationform' %}">Transportations</a></li>
+	    <li class="breadcrumb-item"><a href="{% url 'reservations:conferenceform' %}">Conference</a></li>
+	    <li class="breadcrumb-item" ><a href="{% url 'reservations:securityform' %}">Security</a></li>
+	  </ol>
+	</nav>
+{% endblock %}
+{% block content %}
+		<div class="container">
+				<div class="row">
+					<div class="booking-form">
+						<div class="booking-bg" id="transportation_form_bg"></div>
+						<form method="POST">
+							{% csrf_token %}
+							<div class="form-header">
+								<h4>Transportation Reservation</h4>
+							</div>
+							<div class="row">
+								<div class="col-md-6">
+									<div class="form-group">
+										<span class="form-label">Travel Date</span>
+										{{ form.date }}
+									</div>
+								</div>
+								<div class="col-md-6">
+									<div class="form-group">
+										<span class="form-label">Car Type</span>
+										{{ form.car_type }}
+										<span class="select-arrow"></span>
+									</div>
+								</div>
+							</div>
+							<div class="form-group">
+								<span class="form-label">Building / Landmark</span>
+								{{ form.location }}
+							</div>
+							<div class="form-group">
+								<span class="form-label">Purpose of Visit</span>
+								{{ form.visit_reason }}
+							</div>
+							<div class="form-btn">
+								<button type="submit" class="submit-btn">Add Reservation</button>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+		
+{% endblock %}

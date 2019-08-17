@@ -1,0 +1,50 @@
+	{% extends "reservations/base.html" %}
+{% block title %}PBG Homepage{% endblock%}
+{% block topnav%}
+	<nav aria-label="breadcrumb">
+	  <ol class="breadcrumb">
+	    <li class="breadcrumb-item"><a href="{% url 'reservations:accomodationform' %}">Accomodation</a></li>
+	    <li class="breadcrumb-item"><a href="{% url 'reservations:transportationform' %}">Transportations</a></li>
+	    <li class="breadcrumb-item"><a href="{% url 'reservations:conferenceform' %}">Conference</a></li>
+	    <li class="breadcrumb-item active" aria-current="page"><a href="{% url 'reservations:securityform' %}">Security</a></li>
+	  </ol>
+	</nav>
+{% endblock %}
+
+{% block content %}
+		<div class="container">
+				<div class="row">
+					<div class="booking-form">
+						<div class="booking-bg" id="security_form_bg"></div>
+						<form method="POST">
+							{% csrf_token %}
+							<div class="form-header">
+								<h4>Security Services</h4>
+							</div>
+
+							<div class="form-group">
+								<span class="form-label">Security Package</span>
+								{{ form.security_packages }}
+								<span class="select-arrow"></span>
+							</div>
+							<div class="form-group">
+								<span class="form-label">Start Date</span>
+								{{ form.start_date }}
+							</div>
+							<div class="form-group">
+								<span class="form-label">End Date</span>
+								{{ form.end_date }}
+							</div>
+							<div class="form-group">
+								<span class="form-label">Description</span>
+								{{ form.comments }}
+							</div>
+							<div class="form-btn">
+								<button type="submit" class="submit-btn">Book Now</button>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+		
+{% endblock %}

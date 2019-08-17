@@ -1,0 +1,29 @@
+.header-button{
+	position: absolute;
+	right: 5%;    
+}
+
+.menu-sidebar{
+	width: 250px;
+}
+
+.menu-sidebar .logo{
+	background: #ffffff;
+}
+
+.menu-sidebar2 .logo{
+	background: #ffffff;
+}
+
+.page-container{
+	padding-left: 250px;
+}
+
+.header-desktop{
+	left: 250px;
+}
+.radiolabel label{
+	position: static !important;
+	top:0;
+	left: 0;
+}

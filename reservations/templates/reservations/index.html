@@ -1,0 +1,34 @@
+{% extends "reservations/base.html" %}
+{% block title %}PBG Homepage{% endblock%}
+
+
+{% block content %}
+
+<div class="container">
+	<div class="row">
+		<div class="col-md-5 m-4 service-category service-accomodation" id="accomodation">
+			<div class="transbox">
+				<h2>ACCOMODATION</h2>
+			</div>
+		</div>
+		<div class="col-md-5 m-4 service-category service-transportation" id="transportation">
+			<div class="transbox">
+				<h2>TRANSPORTATION</h2>
+			</div>
+		</div>
+		
+	</div>
+	<div class="row">
+		<div class="col-md-5 m-4 service-category service-conference" id="conference">
+			<div class="transbox">
+				<h2>CONFERENCES</h2>
+			</div>
+		</div>
+		<div class="col-md-5 m-4 service-category service-security" id="security">
+			<div class="transbox">
+				<h2>SECURITY</h2>
+			</div>
+		</div>
+	</div>
+</div>
+{% endblock %}
