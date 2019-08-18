@@ -21,7 +21,7 @@ import reservations.views
 urlpatterns = [
     path('',reservations.views.index),
     path('reservations/',include('reservations.urls')),
-    path('settings/', admin.site.urls),
+    path('settings/', admin.site.urls,name='admsettings'),
     path('login/',auth_views.LoginView.as_view(),name='login',kwargs={"redirect_authenticated_user":True}),
     path('logout/',auth_views.LogoutView.as_view(),name='logout'),
 ]
