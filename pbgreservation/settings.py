@@ -29,7 +29,7 @@ SECRET_KEY = 'u0!31l^6mbl^=fdv283gl^za=j@kxjx!l!qt$4#4t)$47lb=%$'
 DEBUG = True
 #DEBUG = os.environ.get('DJANGO_DEBUG', '') != 'False'
 
-ALLOWED_HOSTS = ['https://infinite-brook-22378.herokuapp.com/reservations']
+ALLOWED_HOSTS = []
 
 
 # Application definition
@@ -136,4 +136,4 @@ STATICFILES_DIRS = (
 )
 
 #  Add configuration for static files storage using whitenoise
-STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage'
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
