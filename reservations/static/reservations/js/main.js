@@ -1,3 +1,5 @@
+const BASE_DIR = window.location.origin;
+
 (function ($) {
     "use strict";
 
@@ -74,7 +76,7 @@
     
 
     $('.service-category').on('click',function(){
-      window.location.href=this.url
+      window.location.href=BASE_DIR+this.dataset['url']
     })
 
 })(jQuery);
