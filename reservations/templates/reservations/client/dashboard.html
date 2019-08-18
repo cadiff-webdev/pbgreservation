@@ -52,13 +52,13 @@
                     <div class="image img-cir img-120">
                         <img src="{% static 'reservations/images/icon/avatar-big-01.jpg' %}" alt="John Doe" />
                     </div>
-                    <h4 class="name">john doe</h4>
-                    <a href="#">Sign out</a>
+                    <h4 class="name">{{ user.get_full_name }}</h4>
+                    <a href="{% url 'logout' %}">Sign out</a>
                 </div>
                 <nav class="navbar-sidebar2">
                     <ul class="list-unstyled navbar__list">
                         <li>
-                            <a href="chart.html">
+                            <a href="#">
                                 <i class="fas fa-chart-bar"></i>My Account</a>
                         </li>
                         <li class="has-sub">
@@ -219,6 +219,9 @@
                                             </tr>
                                         </thead>
                                         <tbody>
+                                            {% if reservations|length <= 0 %}
+                                                <b>No reservations made</b>
+                                            {% endif %}
                                             {% for res in reservations %}
                                                 <tr class="tr-shadow">
                                                     <td>

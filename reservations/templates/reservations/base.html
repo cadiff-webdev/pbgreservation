@@ -85,7 +85,7 @@
 					</h4>
 
 				  {% block sidebar %}
-						{% if request.session.reservations_count <= 0 or request.session.reservations_count %}
+						{% if request.session.reservations_count <= 0 or not request.session.reservations_count %}
 							<h6>No pending reservations.</h6>
 						{% endif %}
 						<div class="accordion" id="accordionExample">
