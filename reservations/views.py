@@ -218,14 +218,24 @@ def bookreservations(request):
 
 	return render(request,'reservations/successfulbooking.html')
 
-def admindashboard(request):
+def admindashboard(request,category):
 	accomodation = AccomodationReservation.objects.all()
 	transportation = TransportReservation.objects.all()
 	security = SecurityReservation.objects.all()
 	conference = ConferenceReservation.objects.all()
-	reservations = chain(accomodation,transportation)
-	reservations = chain(reservations,security)
-	reservations = chain(reservations,conference)
+	
+	if(category=='accomodation'):
+		reservations = accomodation
+	elif(category=='transportation'):
+		reservations = transportation
+	elif(category=='security'):
+		reservations = security
+	elif(category=='conference'):
+		reservations = conference
+	else:		
+		reservations = chain(accomodation,transportation)
+		reservations = chain(reservations,security)
+		reservations = chain(reservations,conference)
 
 	return render(request,'reservations/admin/dashboard.html',{'reservations':reservations})
 

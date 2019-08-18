@@ -8,11 +8,11 @@ urlpatterns = [
     path('transportation',views.transportation, name='transportationform'),
     path('security',views.security, name='securityform'),
     path('conference',views.conference,name='conferenceform'),
-    path('admin-site/',views.admindashboard,name='admindashboard'),
-    
+   
     re_path(r'^dashboard/(?P<category>[\w]*)/',views.clientdashboard,name='clientdashboard'),
+    re_path(r'^admin/(?P<category>[\w]*)/',views.admindashboard,name='admindashboard'),
     
-    path('admin-site/users/',views.userslist,name='users'),
+    path('admin/users/',views.userslist,name='users'),
     path('signup/',views.signup,name='signup'),
     path('book/',views.bookreservations,name='book'),
 

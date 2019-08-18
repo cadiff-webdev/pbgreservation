@@ -62,20 +62,20 @@
                             <a class="js-arrow" href="#">
                                 <i class="fas fa-tachometer-alt"></i>Reservations</a>
                             <ul class="navbar-mobile-sub__list list-unstyled js-sub-list">
-                                <li>
-                                    <a href="{% url 'reservations:admindashboard' %}">All</a>
+                                 <li>
+                                    <a href="{% url 'reservations:admindashboard' 'all' %}">All</a>
                                 </li>
                                 <li>
-                                    <a href="index.html">Accomodations</a>
+                                    <a href="{% url 'reservations:admindashboard' 'accomodation' %}">Accomodations</a>
                                 </li>
                                 <li>
-                                    <a href="#">Transportation</a>
+                                    <a href="{% url 'reservations:admindashboard' 'transportation' %}">Transportation</a>
                                 </li>
                                 <li>
-                                    <a href="index3.html">Conference</a>
+                                    <a href="{% url 'reservations:admindashboard' 'conference' %}">Conference</a>
                                 </li>
                                 <li>
-                                    <a href="index4.html">Security</a>
+                                    <a href="{% url 'reservations:admindashboard' 'security' %}">Security</a>
                                 </li>
                             </ul>
                         </li>
@@ -108,19 +108,19 @@
                                 <i class="fas fa-tachometer-alt"></i>Reservations</a>
                             <ul class="navbar-mobile-sub__list list-unstyled js-sub-list">
                                 <li>
-                                    <a href="{% url 'reservations:admindashboard' %}">All</a>
+                                    <a href="{% url 'reservations:admindashboard' 'all' %}">All</a>
                                 </li>
                                 <li>
-                                    <a href="index.html">Accomodations</a>
+                                    <a href="{% url 'reservations:admindashboard' 'accomodation' %}">Accomodations</a>
                                 </li>
                                 <li>
-                                    <a href="">Transportation</a>
+                                    <a href="{% url 'reservations:admindashboard' 'transportation' %}">Transportation</a>
                                 </li>
                                 <li>
-                                    <a href="index3.html">Conference</a>
+                                    <a href="{% url 'reservations:admindashboard' 'conference' %}">Conference</a>
                                 </li>
                                 <li>
-                                    <a href="index4.html">Security</a>
+                                    <a href="{% url 'reservations:admindashboard' 'security' %}">Security</a>
                                 </li>
                             </ul>
                         </li>
