@@ -1,5 +1,3 @@
-const BASE_DIR = 'http://127.0.0.1:8000';
-
 (function ($) {
     "use strict";
 
@@ -76,7 +74,7 @@ const BASE_DIR = 'http://127.0.0.1:8000';
     
 
     $('.service-category').on('click',function(){
-      window.location.href=BASE_DIR+"/reservations/"+this.id
+      window.location.href=this.url
     })
 
 })(jQuery);

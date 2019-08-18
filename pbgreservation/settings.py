@@ -29,7 +29,7 @@ SECRET_KEY = 'u0!31l^6mbl^=fdv283gl^za=j@kxjx!l!qt$4#4t)$47lb=%$'
 DEBUG = True
 #DEBUG = os.environ.get('DJANGO_DEBUG', '') != 'False'
 
-ALLOWED_HOSTS = ['pbgreservation.herokuapp.com','127.0.0.1']
+ALLOWED_HOSTS = ['pbgreservation.herokuapp.com','localhost']
 
 
 # Application definition
