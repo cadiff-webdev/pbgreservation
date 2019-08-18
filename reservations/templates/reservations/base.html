@@ -55,9 +55,9 @@
        <nav aria-label="breadcrumb">
 			  <ol class="breadcrumb">
 			  	{% if user.is_staff %}
-			    <li class="breadcrumb-item"><a href="{% url 'reservations:admindashboard' %}">Admin</a></li>
+			    <li class="breadcrumb-item"><a href="{% url 'reservations:admindashboard' 'all' %}">Admin</a></li>
 			    {% else %}
-			    <li class="breadcrumb-item"><a href="{% url 'reservations:clientdashboard' %}">Dashboard</a></li>
+			    <li class="breadcrumb-item"><a href="{% url 'reservations:clientdashboard' 'all' %}">Dashboard</a></li>
 			    {% endif %}
 			    <li class="breadcrumb-item active" aria-current="page"><a href="{% url 'logout' %}">Logout</a></li>
 			  </ol>
@@ -79,7 +79,7 @@
 		  </div>
 		  <div class="col-md-3 mb-4">
   			<div  class="" id="sidebar">
-			    <h4>Reservations{% if request.session.reservations_count > 0 %}
+			    <h4>Reservations{% if request.session.reservations_count > 0 or request.session.reservations_count  %}
 						  ({{ request.session.reservations_count }})</h4>
 						{% endif %}
 					</h4>
