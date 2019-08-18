@@ -11,7 +11,7 @@
     <meta name="keywords" content="au theme template">
 
     <!-- Title Page-->
-    <title>Dashboard 2</title>
+    <title>Client Dashboard</title>
 
     <!-- Fontfaces CSS-->
     <link href="{% static 'reservations/css/font-face.css' %}" rel="stylesheet" media="all">
@@ -62,22 +62,22 @@
                                 <i class="fas fa-chart-bar"></i>My Account</a>
                         </li>
                         <li class="has-sub">
-                            <a href="#">
-                                <i class="fas fa-tachometer-alt"></i>Reservations
+                            <a href="{% url 'reservations:clientdashboard' '' %}">
+                                <i class="fas fa-tachometer-alt"></i>All Reservations
                                 <span class="bot-line"></span>
                             </a>
                             <ul class="header3-sub-list list-unstyled">
                                 <li>
-                                    <a href="index.html">Accomodation</a>
+                                    <a href="{% url 'reservations:clientdashboard' 'accomodation' %}">Accomodation</a>
                                 </li>
                                 <li>
-                                    <a href="index2.html">Transport</a>
+                                    <a href="{% url 'reservations:clientdashboard' 'transportation' %}">Transport</a>
                                 </li>
                                 <li>
-                                    <a href="index3.html">Conference</a>
+                                    <a href="{% url 'reservations:clientdashboard' 'conference' %}">Conference</a>
                                 </li>
                                 <li>
-                                    <a href="index4.html">Security</a>
+                                    <a href="{% url 'reservations:clientdashboard' 'security' %}">Security</a>
                                 </li>
                             </ul>
                         </li>
@@ -141,7 +141,7 @@
                             </li>
                         <li class="has-sub">
                             <a class="js-arrow" href="#">
-                                <i class="fas fa-tachometer-alt"></i>Reservations</a>
+                                <i class="fas fa-tachometer-alt"></i> All Reservations</a>
                             <ul class="navbar-mobile-sub__list list-unstyled js-sub-list">
                                 <li>
                                     <a href="index.html">Accomodation</a>
@@ -182,8 +182,8 @@
                                             <li class="list-inline-item">Dashboard</li>
                                         </ul>
                                     </div>
-                                    <button class="au-btn au-btn-icon au-btn--green">
-                                        <i class="zmdi zmdi-plus"></i>new reservation</button>
+                                    <a href="{% url 'reservations:index' %}"><button class="au-btn au-btn-icon au-btn--green">
+                                        <i class="zmdi zmdi-plus"></i>new reservation</button></a>
                                 </div>
                             </div>
                         </div>
@@ -200,75 +200,65 @@
                             <div class="col-md-12">
                                 <!-- DATA TABLE-->
                                 <div class="table-responsive m-b-40">
-                                    <table class="table table-borderless table-data3">
+                                     <table class="table table-data2">
                                         <thead>
                                             <tr>
-                                                <th>date</th>
-                                                <th>type</th>
-                                                <th>description</th>
+                                                <th>
+                                                    <label class="au-checkbox">
+                                                        <input type="checkbox">
+                                                        <span class="au-checkmark"></span>
+                                                    </label>
+                                                </th>
+                                                <th>name</th>
+                                                <th>email</th>
+                                                <th>service</th>
                                                 <th>status</th>
-                                                <th>price</th>
+                                                <th>start date</th>
+                                                <th>end date</th>
+                                                <th></th>
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <tr>
-                                                <td>2018-09-29 05:57</td>
-                                                <td>Mobile</td>
-                                                <td>iPhone X 64Gb Grey</td>
-                                                <td class="process">Processed</td>
-                                                <td>$999.00</td>
-                                            </tr>
-                                            <tr>
-                                                <td>2018-09-28 01:22</td>
-                                                <td>Mobile</td>
-                                                <td>Samsung S8 Black</td>
-                                                <td class="process">Processed</td>
-                                                <td>$756.00</td>
-                                            </tr>
-                                            <tr>
-                                                <td>2018-09-27 02:12</td>
-                                                <td>Game</td>
-                                                <td>Game Console Controller</td>
-                                                <td class="denied">Denied</td>
-                                                <td>$22.00</td>
-                                            </tr>
-                                            <tr>
-                                                <td>2018-09-26 23:06</td>
-                                                <td>Mobile</td>
-                                                <td>iPhone X 256Gb Black</td>
-                                                <td class="denied">Denied</td>
-                                                <td>$1199.00</td>
-                                            </tr>
-                                            <tr>
-                                                <td>2018-09-25 19:03</td>
-                                                <td>Accessories</td>
-                                                <td>USB 3.0 Cable</td>
-                                                <td class="process">Processed</td>
-                                                <td>$10.00</td>
-                                            </tr>
-                                            <tr>
-                                                <td>2018-09-29 05:57</td>
-                                                <td>Accesories</td>
-                                                <td>Smartwatch 4.0 LTE Wifi</td>
-                                                <td class="denied">Denied</td>
-                                                <td>$199.00</td>
-                                            </tr>
-                                            <tr>
-                                                <td>2018-09-24 19:10</td>
-                                                <td>Camera</td>
-                                                <td>Camera C430W 4k</td>
-                                                <td class="process">Processed</td>
-                                                <td>$699.00</td>
-                                            </tr>
-                                            <tr>
-                                                <td>2018-09-22 00:43</td>
-                                                <td>Computer</td>
-                                                <td>Macbook Pro Retina 2017</td>
-                                                <td class="process">Processed</td>
-                                                <td>$10.00</td>
-                                            </tr>
-                                        </tbody>
+                                            {% for res in reservations %}
+                                                <tr class="tr-shadow">
+                                                    <td>
+                                                        <label class="au-checkbox">
+                                                            <input type="checkbox">
+                                                            <span class="au-checkmark"></span>
+                                                        </label>
+                                                    </td>
+                                                    <td>{{ res.guest_id.user.get_full_name }}</td>
+                                                    <td>
+                                                        <span class="block-email">{{ res.guest_id.user.email }}</span>
+                                                    </td>
+                                                    <td class="desc">{{ res.gettype|title }}</td>
+                                                    <td>
+                                                        <span class="status--process">{{ res.status }}</span>
+                                                    </td>
+                                                    <td>
+                                                        {{ res.start_date|date:"Y-m-d" }}
+                                                    </td>
+                                                    <td>{{ res.end_date|date:"Y-m-d" }}</td>
+                                                    <td>
+                                                        <div class="table-data-feature">
+                                                            <button class="item" data-toggle="tooltip" data-placement="top" title="Send">
+                                                                <i class="zmdi zmdi-mail-send"></i>
+                                                            </button>
+                                                            <button class="item" data-toggle="tooltip" data-placement="top" title="Edit">
+                                                                <i class="zmdi zmdi-edit"></i>
+                                                            </button>
+                                                            <button class="item" data-toggle="tooltip" data-placement="top" title="Delete">
+                                                                <i class="zmdi zmdi-delete"></i>
+                                                            </button>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                                <tr class="spacer"></tr>
+                                                {{ res.start_date }}
+                                            {% endfor %}
+                                            </tbody>
                                     </table>
+                                
                                 </div>
                                 <!-- END DATA TABLE-->
                             </div>
@@ -279,7 +269,7 @@
             </section>
             <!-- END STATISTIC-->
 
-            <section>
+            <section style="visibility: hidden">
                 <div class="container-fluid">
                     <div class="row">
                         <div class="col-md-12">

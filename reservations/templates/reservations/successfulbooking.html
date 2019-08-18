@@ -1,0 +1,19 @@
+{% extends "reservations/base.html" %}
+{% block title %}PBG Homepage{% endblock%}
+
+
+{% block content %}
+
+<div class="container">
+	<div class="row">
+		<div class="col-md-11 m-4" id="successful_booking">
+			<h2>Booking Successful</h2>
+			<p>Your booking had been made successfully. Go to your client dashboard to view the status of your
+			reservation. You will receive a confirmation email upon approval of your booking.</p>
+			<a href="{% url 'reservations:clientdashboard' %}"><button class="btn btn-primary">Client Dashboard</button></a>
+			<a href="{% url 'reservations:index' %}"><button class="btn btn-primary">HOME</button></a>
+
+		</div>
+	</div>
+</div>
+{% endblock %}

@@ -85,10 +85,8 @@
 					</h4>
 
 				  {% block sidebar %}
-						<p>{{ user.get_full_name }}</p>
-
 						{% if request.session.reservations_count <= 0 %}
-							<h6>No reservations made.</h6>
+							<h6>No pending reservations.</h6>
 						{% endif %}
 						<div class="accordion" id="accordionExample">
 					  {% for num,reservation in request.session.reservations.items %}
@@ -111,7 +109,9 @@
 					  {% endfor %}
 					</div>
 					<div>
-						<button class="btn btn-primary" onclick="window.location.href = 'http://127.0.0.1:8000/reservations/book'">BOOK NOW</button>
+						{% if request.session.reservations_count > 0 %}
+							<button class="btn btn-primary" onclick="window.location.href = 'http://127.0.0.1:8000/reservations/book'">BOOK NOW</button>
+						{% endif %}
 					</div>
 			    {% endblock %}
 			  </div>

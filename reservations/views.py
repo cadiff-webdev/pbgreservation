@@ -216,7 +216,7 @@ def bookreservations(request):
 
 	request.session['reservations'] = reservationscopy
 
-	return redirect('reservations:index')
+	return render(request,'reservations/successfulbooking.html')
 
 def admindashboard(request):
 	accomodation = AccomodationReservation.objects.all()
@@ -227,15 +227,35 @@ def admindashboard(request):
 	reservations = chain(reservations,security)
 	reservations = chain(reservations,conference)
 
-	return render(request,'reservations/admin/admindashboard.html',{'reservations':reservations})
+	return render(request,'reservations/admin/dashboard.html',{'reservations':reservations})
 
 def userslist(request):
 	users = Pbguser.objects.all()
 
-	return render(request,'reservations/admin/admin_users.html',{'users':users})
+	return render(request,'reservations/admin/users.html',{'users':users})
 
-def clientdashboard(request):
-	return render(request,'reservations/admin/clientdashboard.html')
+def clientdashboard(request,category):
+	guest = Pbguser.objects.get(pk=request.user.pbguser.id)
+	
+	accomodation = AccomodationReservation.objects.filter(guest_id=guest)
+	transportation = TransportReservation.objects.filter(guest_id=guest)
+	security = SecurityReservation.objects.filter(guest_id=guest)
+	conference = ConferenceReservation.objects.filter(guest_id=guest)
+	
+	if(category=='accomodation'):
+		reservations = accomodation
+	elif(category=='transportation'):
+		reservations = transportation
+	elif(category=='security'):
+		reservations = security
+	elif(category=='conference'):
+		reservations = conference
+	else:		
+		reservations = chain(accomodation,transportation)
+		reservations = chain(reservations,security)
+		reservations = chain(reservations,conference)
+
+	return render(request,'reservations/client/dashboard.html',{'reservations':reservations})
 
 def signup(request):
   if request.method == 'POST':
