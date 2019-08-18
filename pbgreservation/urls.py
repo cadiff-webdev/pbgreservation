@@ -16,9 +16,10 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import include,path
 from django.contrib.auth import views as auth_views
+import reservations.views
 
 urlpatterns = [
-    path('',include('reservations.urls')),
+    path('',reservations.views.index),
     path('reservations/',include('reservations.urls')),
     path('settings/', admin.site.urls),
     path('login/',auth_views.LoginView.as_view(),name='login',kwargs={"redirect_authenticated_user":True}),
