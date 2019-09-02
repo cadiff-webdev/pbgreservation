@@ -27,3 +27,30 @@
 	top:0;
 	left: 0;
 }
+.account2{
+	padding: 2px;
+}
+/*Tables*/
+.table-data2.table tbody td{
+	padding:5px 2px 5px 8px;
+}
+.table-data2.table tbody tr{
+	margin-top: 10px !important;
+}
+.table.dataTable tbody tr{
+	margin-top: 10px !important;
+
+ }
+ .table-earning thead th{
+ 	padding: 3px 10px;
+ }
+,.table-earning tbody td{
+ 	padding: 3px 10px;
+ }
+/* End of tables*/
+
+/* Forms */
+#reservations_buttons button{
+	width: 100%;
+}
+/* End of forms*/

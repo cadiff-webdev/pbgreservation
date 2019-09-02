@@ -75,7 +75,7 @@ class Reservation(models.Model):
 	start_date = models.DateField()
 	end_date = models.DateField()
 	comments = models.TextField()
-
+	created_at = models.DateTimeField(auto_now_add=True)
 	class Meta:
 		abstract = True
 

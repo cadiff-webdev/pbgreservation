@@ -7,6 +7,7 @@ from django.contrib.auth import login, authenticate
 from pprint import pprint
 from itertools import chain
 from django.contrib.auth.models import User
+from django.core import serializers
 
 def index(request):
 	#del request.session['reservations_count']
@@ -32,7 +33,12 @@ def accomodation(request):
 			rescount = request.session.get('reservations_count', 0)
 			rescount = rescount+1
 			request.session['reservations_count'] = rescount
-			
+			display_info = {
+				'GUESTS':number_of_guests,
+				'ROOMS':number_of_rooms,
+				'CHECK-IN':str(start_date.date()),
+				'CHECK-OUT':str(end_date.date())
+			}
 			reservation = {
 				'id':rescount,
 				'type':'accomodation',
@@ -43,7 +49,9 @@ def accomodation(request):
 				'number_of_rooms':number_of_rooms,
 				'accomodation_type':str(accomodation_type),
 				'accomodation_type_id':str(accomodation_type.id),
-				'branch':branch.id}
+				'branch':branch.id,
+				'todisplay':display_info}
+
 			if not request.session.get('reservations'):
 				request.session['reservations']={}
 			request.session['reservations'].update({rescount:reservation})
@@ -65,14 +73,19 @@ def transportation(request):
 			rescount = request.session.get('reservations_count', 0)
 			rescount = rescount+1
 			request.session['reservations_count'] = rescount
-			
+			display_info = {
+				'CAR TYPE':car_type,
+				'LOCATION':location,
+				'TRAVEL-DATE':str(date.date()),
+			}
 			reservation = {
 				'id':rescount,
 				'type':'transportation',
 				'date':str(date.date()),
 				'visit_reason':visit_reason,
 				'car_type':car_type,
-				'location':location}
+				'location':location,
+				'todisplay':display_info}
 
 			if not request.session.get('reservations'):
 				request.session['reservations']={}
@@ -95,14 +108,19 @@ def security(request):
 			rescount = request.session.get('reservations_count', 0)
 			rescount = rescount+1
 			request.session['reservations_count'] = rescount
-			
+			display_info = {
+				'SERVICE':str(security_package.name),
+				'START DATE':str(start_date.date()),
+				'END DATE':str(end_date.date())
+			}
 			reservation = {
 				'id':rescount,
 				'type':'security',
 				'start_date':str(start_date.date()),
 				'end_date':str(end_date.date()),
 				'security_package':str(security_package.id),
-				'comments':comments}
+				'comments':comments,
+				'todisplay':display_info}
 
 			if not request.session.get('reservations'):
 				request.session['reservations']={}
@@ -125,14 +143,19 @@ def conference(request):
 			rescount = request.session.get('reservations_count', 0)
 			rescount = rescount+1
 			request.session['reservations_count'] = rescount
-			
+			display_info={
+				'DATE':str(date.date()),
+				'BRANCH':str(branch.name),
+				'HALL':str(hall.name),
+				}
 			reservation = {
 				'id':rescount,
 				'type':'conference',
 				'date':str(date.date()),
 				'branch':str(branch.id),
 				'hall':str(hall.id),
-				'comments':comments}
+				'comments':comments,
+				'todisplay':display_info}
 
 			if not request.session.get('reservations'):
 				request.session['reservations']={}
@@ -215,6 +238,7 @@ def bookreservations(request):
 			reservationscopy.pop(key)	
 
 	request.session['reservations'] = reservationscopy
+	request.session['reservations_count'] = 0
 
 	return render(request,'reservations/successfulbooking.html')
 
@@ -236,13 +260,31 @@ def admindashboard(request,category):
 		reservations = chain(accomodation,transportation)
 		reservations = chain(reservations,security)
 		reservations = chain(reservations,conference)
+	def myfn(r):
+		return r.created_at
 
+	reservations = sorted(reservations,key=myfn)
 	return render(request,'reservations/admin/dashboard.html',{'reservations':reservations})
 
 def userslist(request):
 	users = Pbguser.objects.all()
 
 	return render(request,'reservations/admin/users.html',{'users':users})
+
+def editreservation(request,category,res_id):
+	if(category=='accomodation'):
+		reservation = AccomodationReservation.objects.select_related().get(pk=res_id)
+		reservation = serializers.serialize( "python", reservation)
+	elif(category=='transportation'):
+		reservation =get_object_or_404( TransportReservation,pk=res_id)
+	elif(category=='security'):
+		reservation = get_object_or_404(SecurityReservation,pk=res_id)
+	elif(category=='conference'):
+		reservation = get_object_or_404(ConferenceReservation,pk=res_id)
+	else:
+		return render(request,'reservations/admin/dashboard.html')
+
+	return render(request,'reservations/admin/reservation.html',{'res':reservation})
 
 def clientdashboard(request,category):
 	guest = Pbguser.objects.get(pk=request.user.pbguser.id)

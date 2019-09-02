@@ -89,28 +89,28 @@
 							<h6>No pending reservations.</h6>
 						{% endif %}
 						<div class="accordion" id="accordionExample">
-					  {% for num,reservation in request.session.reservations.items %}
-					  <div class="card">
-					    <div class="card-header" id="headingThree">
-					      <h2 class="mb-0">
-					        <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#collapse{{ forloop.counter }}" aria-expanded="false" aria-controls="collapse{{ forloop.counter }}">
-					        	Reservation {{ num }}
-					        </button>
-					      </h2>
-					    </div>
-					    <div id="collapse{{ forloop.counter }}" class="collapse" aria-labelledby="heading{{ forloop.counter }}" data-parent="#accordionExample">
-					      <div class="card-body">
-					      	{% for key, value in reservation.items %}
-					        	{{ key }} : {{ value }}
-					        {% endfor %}
-					      </div>
-					    </div>
-					  </div>
-					  {% endfor %}
-					</div>
+						  {% for num,reservation in request.session.reservations.items %}
+						  <div class="card">
+						    <div class="card-header" id="headingThree">
+						      <h2 class="mb-0">
+						        <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#collapse{{ forloop.counter }}" aria-expanded="false" aria-controls="collapse{{ forloop.counter }}">
+						        	RES #{{ num }} [{{ reservation.type }}]
+						        </button>
+						      </h2>
+						    </div>
+						    <div id="collapse{{ forloop.counter }}" class="collapse" aria-labelledby="heading{{ forloop.counter }}" data-parent="#accordionExample">
+						      <div class="card-body">
+						      	{% for key, value in reservation.todisplay.items %}
+						        	<div>{{ key }} : {{ value }}</div>
+						        {% endfor %}
+						      </div>
+						    </div>
+						  </div>
+						  {% endfor %}
+						</div>
 					<div>
 						{% if request.session.reservations_count > 0 %}
-							<a href="{% url 'reservations:book' %}"><button class="btn btn-primary">BOOK NOW</button></a>
+							<a href="{% url 'reservations:book' %}"><button class="btn btn-primary m-2">BOOK NOW</button></a>
 						{% endif %}
 					</div>
 			    {% endblock %}

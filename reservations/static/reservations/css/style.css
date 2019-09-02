@@ -195,7 +195,7 @@ main{
 	font-family: "Playfair Display", Georgia, "Times New Roman", serif;
 }
 .transbox h1, .transbox h2,.transbox h3,.transbox h4{
-	padding-top: 43px ;
+	padding-top: 53px ;
 }
 .transbox{
 	width: 100%;
@@ -215,3 +215,9 @@ main{
 .service-security{
 	background-image: url('../images/land-security.jpg');
 }
+
+/* Accordian */
+.card-header{
+	padding: 0;
+}
+/* End of Accordian */
