@@ -1,5 +1,5 @@
 from django import forms
-from django.contrib.auth.forms import AuthenticationForm,UserCreationForm
+from django.contrib.auth.forms import AuthenticationForm,UserCreationForm,UserChangeForm
 from django.contrib.auth.models import User
 from django.utils.timezone import now
 from reservations.models import * 
@@ -24,7 +24,9 @@ class SecurityReservationForm(forms.Form):
 	security_options = [('S','Site-Based'),('M','Mobile'),('C','Close Protection')]
 	security_packages = forms.ModelChoiceField(SecurityService.objects.all())
 	security_packages.widget.attrs.update({'class': 'form-control'})
-
+	number_of_guests = forms.IntegerField(min_value=1)
+	number_of_guests.widget.attrs.update({'class': 'form-control'})
+	
 class ConferenceReservationForm(forms.Form):
 	date = forms.DateTimeField(
 		label='MEETING DATE',
@@ -38,11 +40,13 @@ class ConferenceReservationForm(forms.Form):
 	branch.widget.attrs.update({'class': 'form-control'})
 	hall = forms.ModelChoiceField(ConferenceHall.objects.all())
 	hall.widget.attrs.update({'class': 'form-control'})
-	
+	number_of_guests = forms.IntegerField(min_value=1)
+	number_of_guests.widget.attrs.update({'class': 'form-control'})
+	 
 class TransportationReservationForm(forms.Form):
 	date = forms.DateTimeField(
 		label='TRAVEL DATE',
-    input_formats=['%d/%m/%Y'], 
+    input_formats=['%d/%m/%YThh:ii'], 
     widget=BootstrapDateTimePickerInput()
   )
 	car_options = [('A','Armored'),('N','Normal')]
@@ -52,7 +56,9 @@ class TransportationReservationForm(forms.Form):
 	location.widget.attrs.update({'class': 'form-control'})
 	visit_reason = forms.CharField(required=False,widget=forms.Textarea())
 	visit_reason.widget.attrs.update({'class': 'form-control, commentbox'})
-
+	number_of_guests = forms.IntegerField(min_value=1)
+	number_of_guests.widget.attrs.update({'class': 'form-control'})
+	
 class AccomodationReservationForm(forms.Form):
 	room_type= [('S','Standard Room'),('E','VIP Room'),('V','Villa')]
 	start_date = forms.DateTimeField(
@@ -102,3 +108,28 @@ class SignUpForm(UserCreationForm):
       'username': forms.fields.TextInput(attrs={'placeholder': 'Username'}),
       'password2': forms.fields.TextInput(attrs={'placeholder': 'Confirm Password'})
     }
+
+
+class EditProfileForm(UserChangeForm):
+	first_name = forms.CharField(
+		max_length=30, 
+		required=False, help_text='Optional',
+		widget=forms.TextInput(attrs={'placeholder':'First Name'}
+		))
+	last_name = forms.CharField(
+		max_length=30, required=False, help_text='Optional',
+				widget=forms.TextInput(attrs={'placeholder':'Last Name'}))
+	email = forms.EmailField(max_length=254, help_text='Required. Provide a valid email address.',
+				widget=forms.TextInput(attrs={'placeholder':'Email Address'}))
+	gender_choices = [('M','Male'),('F','Female')]
+	gender = forms.CharField(max_length=1, help_text='M / F',widget=forms.RadioSelect(choices=gender_choices))
+	phone_number = forms.CharField(
+		max_length=30, 
+		required=False, help_text='Optional',
+		widget=forms.TextInput(attrs={'placeholder':'Mobile number'}
+		))
+	class Meta:
+		model = User
+		fields = ('username','first_name','last_name','email','gender','phone_number')
+		
+

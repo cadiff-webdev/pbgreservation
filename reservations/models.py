@@ -18,7 +18,8 @@ class Pbguser(models.Model):
 		default=None,
 		null=True
 		)
-	phone_number = models.CharField(max_length=50)
+	phone_number = models.CharField(max_length=50,
+		null=True)
 
 	@receiver(post_save,sender=User)
 	def create_user_profile(sender,instance,created,**kwargs):
@@ -74,6 +75,7 @@ class Reservation(models.Model):
 	status = models.CharField(choices=status_options,max_length=1)
 	start_date = models.DateField()
 	end_date = models.DateField()
+	number_of_guests = models.SmallIntegerField()
 	comments = models.TextField()
 	created_at = models.DateTimeField(auto_now_add=True)
 	class Meta:
@@ -88,7 +90,6 @@ class AccomodationReservation(Reservation):
 class ReservedAccomodation(models.Model):
 	branch_id = models.ForeignKey(Branch,on_delete=models.PROTECT)
 	number_of_rooms = models.SmallIntegerField()
-	number_of_guests = models.SmallIntegerField()
 	reservation_id = models.ForeignKey(AccomodationReservation,on_delete=models.PROTECT)
 	accomodation_type_id= models.ForeignKey(AccomodationType,on_delete=models.PROTECT)
 
@@ -108,6 +109,7 @@ class SecurityReservation(Reservation):
 class ConferenceReservation(Reservation):
 	made_by = models.ForeignKey(Pbguser,related_name='conference_made_by',on_delete=models.PROTECT)
 	guest_id = models.ForeignKey(Pbguser,related_name='conference_guest_id',on_delete=models.PROTECT)
+	number_of_guests = models.SmallIntegerField()
 	conference_hall_id = models.ForeignKey(ConferenceHall,on_delete=models.PROTECT)
 	def gettype(self):
 		return "conference"

@@ -13,7 +13,7 @@
                     <form action="" method="post" enctype="multipart/form-data" class="form-horizontal">
                         <div class="row form-group">
                             <div class="col col-md-3">
-                                <label class=" form-control-label">ID</label>
+                                <label class=" form-control-label">Reervation ID:</label>
                             </div>
                             <div class="col-12 col-md-9">
                                 <p class="form-control-static">{{ res.id }}</p>
@@ -21,7 +21,7 @@
                         </div>
                         <div class="row form-group">
                             <div class="col col-md-3">
-                                <label class=" form-control-label">Guest</label>
+                                <label class=" form-control-label">Booked by:</label>
                             </div>
                             <div class="col-12 col-md-9">
                                 <p class="form-control-static">{{ res.guest_id.user.get_full_name }}</p>
@@ -29,7 +29,7 @@
                         </div>
                         <div class="row form-group">
                             <div class="col col-md-3">
-                                <label class=" form-control-label">Check IN</label>
+                                <label class=" form-control-label">Start Date:</label>
                             </div>
                             <div class="col-12 col-md-9">
                                 <p class="form-control-static">{{ res.start_date|date:"d-m-y" }}</p>
@@ -37,7 +37,7 @@
                         </div>
                          <div class="row form-group">
                             <div class="col col-md-3">
-                                <label class=" form-control-label">Check OUT</label>
+                                <label class=" form-control-label">End Date:</label>
                             </div>
                             <div class="col-12 col-md-9">
                                 <p class="form-control-static">{{ res.end_date|date:"d-m-y" }}</p>
@@ -50,46 +50,22 @@
                             <thead>
                                 <tr>
                                     <th>guests</th>
-                                    <th>rooms</th>
-                                    <th>room type</th>
+                                    <th>location</th>
+                                    <th>car type</th>
                                     <th class="text-right">price</th>
                                     <th class="text-right">total</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <tr>
-                                    <td>2</td>
-                                    <td>2</td>
-                                    <td>Standard Room</td>
+                                    <td>{{ res.number_of_guests }}</td>
+                                    <td>{{ res.location }}</td>
+                                    <td>{{ res.car_type }}</td>
                                     <td class="text-right">$999.00</td>
                                     <td class="text-right">$999.00</td>
-                                </tr>
-                                <tr>
-                                    <td>2</td>
-                                    <td>2</td>
-                                    <td>Standard Room</td>
-                                    <td class="text-right">$756.00</td>
-                                    <td class="text-right">$756.00</td>
-                                </tr>
-                                <tr>
-                                    <td>2</td>
-                                    <td>2</td>
-                                    <td>Standard Room</td>
-                                    <td class="text-right">$22.00</td>
-                                    <td class="text-right">$44.00</td>
-                                </tr>
-                                <tr>
-                                    <td>2</td>
-                                    <td>2</td>
-                                    <td>Standard Room</td>
-                                    <td class="text-right">$1199.00</td>
-                                    <td class="text-right">$1199.00</td>
                                 </tr>
                             </tbody>
                         </table>
-                        {% for key, value in res %}
-                        {{ 1 }}
-                        {% endfor %}
                     </div>
                 </div>
                 <div class="card-footer">

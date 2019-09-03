@@ -1,0 +1,112 @@
+{% extends "reservations/admin/base.html" %}
+
+
+   
+{% block maincontent %}
+    <div class="row">
+        <div class="col-lg-9">
+            <div class="card">
+                <div class="card-header">
+                    <strong>View Reservation {{ res.id }}</strong>
+                </div>
+                <div class="card-body card-block">
+                    <form action="" method="post" enctype="multipart/form-data" class="form-horizontal">
+                        <div class="row form-group">
+                            <div class="col col-md-3">
+                                <label class=" form-control-label">ID</label>
+                            </div>
+                            <div class="col-12 col-md-9">
+                                <p class="form-control-static">{{ res.id }}</p>
+                            </div>
+                        </div>
+                        <div class="row form-group">
+                            <div class="col col-md-3">
+                                <label class=" form-control-label">Guest</label>
+                            </div>
+                            <div class="col-12 col-md-9">
+                                <p class="form-control-static">{{ res.guest_id.user.get_full_name }}</p>
+                            </div>
+                        </div>
+                        <div class="row form-group">
+                            <div class="col col-md-3">
+                                <label class=" form-control-label">Check IN</label>
+                            </div>
+                            <div class="col-12 col-md-9">
+                                <p class="form-control-static">{{ res.start_date|date:"d-m-y" }}</p>
+                            </div>
+                        </div>
+                         <div class="row form-group">
+                            <div class="col col-md-3">
+                                <label class=" form-control-label">Check OUT</label>
+                            </div>
+                            <div class="col-12 col-md-9">
+                                <p class="form-control-static">{{ res.end_date|date:"d-m-y" }}</p>
+                            </div>
+                        </div>
+                       
+                    </form>
+                    <div class="table-responsive table--no-card m-b-30">
+                        <table class="table table-borderless table-striped table-earning">
+                            <thead>
+                                <tr>
+                                    <th>guests</th>
+                                    <th>duration</th>
+                                    <th>security package</th>
+                                    <th class="text-right">price</th>
+                                    <th class="text-right">total</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>{{ res.number_of_guests }}</td>
+                                    <td>{{ duration }}</td>
+                                    <td>{{ res.security_type }}</td>
+                                    <td class="text-right">$999.00</td>
+                                    <td class="text-right">$999.00</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="card-footer">
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-3" id="reservation_buttons">
+            <div class="card">
+                <div class="card-header">
+                    <strong></strong>
+                </div>
+                <div class="card-body card-block">
+                    <form action="" method="post" class="form-horizontal">
+                        <div class="row form-group">
+                            <button type="submit" class="btn btn-success col-md-12">
+                                <i class="fa fa-dot-circle-o"></i> Approve
+                            </button>
+                        </div>
+                        <div class="row form-group">
+                            <button type="submit" class="btn btn-danger col-md-12">
+                                    <i class="fa fa-dot-circle-o"></i> Reject
+                            </button>
+                        </div>
+                        <div class="row form-group">
+                            <button type="submit" class="btn btn-warning col-md-12">
+                                <i class="fa fa-dot-circle-o"></i> Cancel
+                            </button>
+                        </div>
+                        <div class="row form-group">
+                            <button type="submit" class="btn btn-info col-md-12">
+                                <i class="fa fa-dot-circle-o"></i> Email Details
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>                  
+        </div>
+    <div class="row">
+        <div class="col-lg-9">
+        </div>  
+    </div>
+{% endblock %}
+            

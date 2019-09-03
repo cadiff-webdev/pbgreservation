@@ -47,8 +47,8 @@
                 <div class="container-fluid">
                     <div class="header-mobile-inner">
                         <a class="logo" href="{% url 'reservations:index' %}">
-                            <img src="{% static 'reservations/images/icon/logo.png' %}" alt="PBF=G Admin" />
-                        </a>
+                             <img src="{% static 'reservations/images/pbglogo.mini.png' %}" alt="PBG ADMIN" />
+                       </a>
                         <button class="hamburger hamburger--slider" type="button">
                             <span class="hamburger-box">
                                 <span class="hamburger-inner"></span>
@@ -86,7 +86,7 @@
                                 <i class="fas fa-chart-bar"></i>Users</a>
                         </li>
                         <li>
-                            <a href="{% url 'admin:index' %}">
+                            <a href="{% url 'admin:index' %}" target="_blank">
                                 <i class="fas fa-chart-bar"></i>Hotel Settings</a>
                         </li>
                     </ul>
@@ -131,7 +131,7 @@
                                 <i class="fas fa-chart-bar"></i>Users</a>
                         </li>
                         <li>
-                            <a href="{% url 'admin:index' %}">
+                            <a href="{% url 'admin:index' %}" target="_blank">
                                 <i class="fas fa-chart-bar"></i>Hotel Settings</a>
                         </li>
                     </ul>
@@ -172,7 +172,7 @@
                                             </div>
                                             <div class="account-dropdown__body">
                                                 <div class="account-dropdown__item">
-                                                    <a href="#">
+                                                    <a href="{%url 'reservations:editprofile' %}">
                                                         <i class="zmdi zmdi-account"></i>Account</a>
                                                 </div>
                                                 <div class="account-dropdown__item">

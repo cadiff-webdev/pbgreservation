@@ -47,23 +47,10 @@
       <div class="col-2 ml-2">
         <img class="logo-image" src="{% static 'reservations/images/pbglogo.mini.png' %}">
       </div>
-      <div class="col-7 text-center">
+      <div class="col-10 text-center">
         <a class="header-logo text-dark" href="{% url 'reservations:index' %}">PBG BOOKING PORTAL</a>
       </div>
-      <div class="col-3 d-flex justify-content-end align-items-center">
-      {% block sidelinks %}
-       <nav aria-label="breadcrumb">
-			  <ol class="breadcrumb">
-			  	{% if user.is_staff %}
-			    <li class="breadcrumb-item"><a href="{% url 'reservations:admindashboard' 'all' %}">Admin</a></li>
-			    {% else %}
-			    <li class="breadcrumb-item"><a href="{% url 'reservations:clientdashboard' 'all' %}">Dashboard</a></li>
-			    {% endif %}
-			    <li class="breadcrumb-item active" aria-current="page"><a href="{% url 'logout' %}">Logout</a></li>
-			  </ol>
-			</nav>
-      {% endblock %}
-      </div>
+    
     </div>
   </header>
 
@@ -79,6 +66,20 @@
 		  </div>
 		  <div class="col-md-3 mb-4">
   			<div  class="" id="sidebar">
+  				  <div class="col-12 d-flex justify-content-end align-items-center">
+			      {% block sidelinks %}
+			       <nav aria-label="breadcrumb">
+						  <ol class="breadcrumb">
+						  	{% if user.is_staff %}
+						    <li class="breadcrumb-item"><a href="{% url 'reservations:admindashboard' 'all' %}">Admin</a></li>
+						    {% else %}
+						    <li class="breadcrumb-item"><a href="{% url 'reservations:clientdashboard' 'all' %}">Dashboard</a></li>
+						    {% endif %}
+						    <li class="breadcrumb-item active" aria-current="page"><a href="{% url 'logout' %}">Logout</a></li>
+						  </ol>
+						</nav>
+			      {% endblock %}
+			      </div>
 			    <h4>Reservations{% if request.session.reservations_count > 0 %}
 						  ({{ request.session.reservations_count }})</h4>
 						{% endif %}

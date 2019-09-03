@@ -10,6 +10,7 @@ urlpatterns = [
     path('conference',views.conference,name='conferenceform'),
    
     path('admin/edit/<slug:category>/<int:res_id>/',views.editreservation,name='edit_reservation'),
+    path('dashboard/account/',views.editprofile,name='editprofile'),
     re_path(r'^dashboard/(?P<category>[\w]*)/',views.clientdashboard,name='clientdashboard'),
     re_path(r'^admin/list/(?P<category>[\w]*)/',views.admindashboard,name='admindashboard'),
     

@@ -33,9 +33,20 @@
 								<small>-- : Hall Description</small>
 								<span class="select-arrow"></span>
 							</div>
-							<div class="form-group">
-								<span class="form-label">Meeting Date</span>
-								{{ form.date }}
+							<div class="row">
+							<div class="col-md-8">
+								<div class="form-group">
+									<span class="form-label">Meeting Date</span>
+									{{ form.date }}
+								</div>
+							</div>
+							<div class="col-md-4">
+								<div class="form-group">
+									<span class="form-label">Guests</span>
+									{{ form.number_of_guests }}
+								</div>
+							</div>
+								
 							</div>
 							<div class="form-group">
 								<span class="form-label">Comments</span>

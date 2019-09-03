@@ -1,6 +1,6 @@
 .header-button{
 	position: absolute;
-	right: 5%;    
+	right: 4%;    
 }
 
 .menu-sidebar{
@@ -15,8 +15,19 @@
 	background: #ffffff;
 }
 
-.page-container{
-	padding-left: 250px;
+@media (max-width: 991px){
+	.page-container {
+    position: relative;
+    top: 88px;
+    padding-left: 0;
+	}
+	.header-button{
+		position: inherit;
+		left: 20px;    
+	}
+	.account-item > .content{
+		margin-left:0;
+	}
 }
 
 .header-desktop{

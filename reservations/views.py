@@ -271,20 +271,30 @@ def userslist(request):
 
 	return render(request,'reservations/admin/users.html',{'users':users})
 
+def clientaccount(request,user_id):
+	user = Pbguser.objects.get(pk=user_id)
+
+	return render(request,'reservations/dashboard/clientaccount.html',{'user':user})
+
 def editreservation(request,category,res_id):
 	if(category=='accomodation'):
 		reservation = AccomodationReservation.objects.select_related().get(pk=res_id)
-		reservation = serializers.serialize( "python", reservation)
+		rooms = ReservedAccomodation.objects.filter(reservation_id=res_id)
+		return render(request,'reservations/admin/accom_reservation.html',{'res':reservation,'rooms':rooms})
 	elif(category=='transportation'):
 		reservation =get_object_or_404( TransportReservation,pk=res_id)
+		duration = reservation.start_date - reservation.end_date
+		return render(request,'reservations/admin/trans_reservation.html',{'res':reservation,'duration':duration})
 	elif(category=='security'):
 		reservation = get_object_or_404(SecurityReservation,pk=res_id)
+		duration = reservation.start_date - reservation.end_date
+		return render(request,'reservations/admin/sec_reservation.html',{'res':reservation,'duration':duration})
 	elif(category=='conference'):
 		reservation = get_object_or_404(ConferenceReservation,pk=res_id)
+		duration = reservation.start_date - reservation.end_date
+		return render(request,'reservations/admin/conf_reservation.html',{'res':reservation,'duration':duration})
 	else:
 		return render(request,'reservations/admin/dashboard.html')
-
-	return render(request,'reservations/admin/reservation.html',{'res':reservation})
 
 def clientdashboard(request,category):
 	guest = Pbguser.objects.get(pk=request.user.pbguser.id)
@@ -325,3 +335,24 @@ def signup(request):
   else:
       form = SignUpForm()
   return render(request, 'registration/signup.html', {'form': form})
+
+def editprofile(request):
+	if request.method == 'POST':
+		form = EditProfileForm(request.POST,instance=request.user)
+		if form.is_valid():
+			user = form.save()
+			user.refresh_from_db()
+			user.pbguser.gender = form.cleaned_data.get('gender')
+			user.pbguser.phone_number = form.cleaned_data.get('phone_number')
+			user.save()
+			if request.user.is_staff:
+				return redirect('reservations:admindashboard','all')
+			else:
+				return redirect('reservations:clientdashboard','all')		
+	else:
+		form = EditProfileForm(instance=request.user)
+	if request.user.is_staff:
+		return render(request, 'reservations/admin/editprofile.html', {'form': form})
+	else:
+		return render(request, 'reservations/client/editprofile.html', {'form': form})
+		
