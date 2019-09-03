@@ -19,7 +19,7 @@ class Pbguser(models.Model):
 		null=True
 		)
 	phone_number = models.CharField(max_length=50,
-		null=True)
+		null=True,default=0)
 
 	@receiver(post_save,sender=User)
 	def create_user_profile(sender,instance,created,**kwargs):
