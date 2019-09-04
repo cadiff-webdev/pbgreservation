@@ -11,47 +11,72 @@
                      <form method="POST" class="register-form" id="register-form">
                             {% csrf_token %}
                             <div class="error">
-                                {{ form.gender.errors|escape }}
+                                {{ pbguserform.gender.errors|escape }}
                             </div>
-                            {% for x in form.gender %}
-                           <div class="form-check form-check-inline radiolabel">
+                            {% for x in pbguserform.gender %}
+                            <div class="form-check form-check-inline radiolabel">
                                 {{ x }}
                             </div>
                             {% endfor %}
-                            <div class="form-group">
-                                <label for="id_first_name">First Name</label>
-                                {{ form.first_name }}
+                            
+                            <div class="row form-group">
+                                <div class="col col-md-3">
+                                    <label for="text-input" class=" form-control-label">First Name</label>
+                                </div>
+                                <div class="col-12 col-md-9">
+                                     {{ userform.first_name }}
+                                </div>
                             </div>
                             <div class="-error">
-                                {{ form.first_name.errors }}
+                                {{ userform.first_name.errors }}
                             </div>
-                            <div class="form-group">
-                                <label for="id_last_name">Last Name</label>
-                                {{ form.last_name }}
-                            </div>
-                            <div class="error">
-                                {{ form.first_name.errors }}
-                            </div>
-                            <div class="form-group">
-                                 <label for="name">Username</label>
-                                {{ form.username }}
+                          
+                            <div class="row form-group">
+                                <div class="col col-md-3">
+                                    <label for="text-input" class=" form-control-label">Last Name</label>
+                                </div>
+                                <div class="col-12 col-md-9">
+                                     {{ userform.last_name }}
+                                </div>
                             </div>
                             <div class="error">
-                                {{ form.username.errors }}
+                                {{ userform.last_name.errors }}
                             </div>
-                            <div class="form-group">
-                               <label for="email">Email address</label>
-                                {{ form.email }}
-                            </div>
-                            <div class="error">
-                                {{ form.email.errors }}
-                            </div>
-                             <div class="form-group">
-                               <label for="email">Phone Number</label>
-                                {{ form.phone_number }}
+                            
+                            <div class="row form-group">
+                                <div class="col col-md-3">
+                                    <label for="text-input" class=" form-control-label">Username</label>
+                                </div>
+                                <div class="col-12 col-md-9">
+                                     {{ userform.username }}
+                                </div>
                             </div>
                             <div class="error">
-                                {{ form.phone_number.errors }}
+                                {{ userform.username.errors }}
+                            </div>
+                            
+                            <div class="row form-group">
+                                <div class="col col-md-3">
+                                    <label for="text-input" class=" form-control-label">Email</label>
+                                </div>
+                                <div class="col-12 col-md-9">
+                                     {{ userform.email }}
+                                </div>
+                            </div>
+                            <div class="error">
+                                {{ userform.email.errors }}
+                            </div>
+                            
+                            <div class="row form-group">
+                                <div class="col col-md-3">
+                                    <label for="text-input" class=" form-control-label">Phone Number</label>
+                                </div>
+                                <div class="col-12 col-md-9">
+                                     {{ pbguserform.phone_number }}
+                                </div>
+                            </div>
+                            <div class="error">
+                                {{ pbguserform.phone_number.errors }}
                             </div>
                            
                             <div class="form-group form-button">

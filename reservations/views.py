@@ -338,21 +338,28 @@ def signup(request):
 
 def editprofile(request):
 	if request.method == 'POST':
-		form = EditProfileForm(request.POST,instance=request.user)
-		if form.is_valid():
-			user = form.save()
-			user.refresh_from_db()
-			user.pbguser.gender = form.cleaned_data.get('gender')
-			user.pbguser.phone_number = form.cleaned_data.get('phone_number')
-			user.save()
+		userform = EditUserForm(request.POST,instance=request.user)
+		pbguserform = EditPbguserForm(request.POST,request.FILES,instance=request.user.pbguser)
+
+		if userform.is_valid() and pbguserform.is_valid():
+			user = userform.save()
+			pbguser = pbguserform.save()
+			pbguser.user=user
+			if pbguser.phone_number=='1234':
+				return redirect('reservations:index')
 			if request.user.is_staff:
 				return redirect('reservations:admindashboard','all')
 			else:
 				return redirect('reservations:clientdashboard','all')		
 	else:
-		form = EditProfileForm(instance=request.user)
+		userform = EditUserForm(instance=request.user)
+		pbguserform = EditPbguserForm(instance=request.user.pbguser)
+		args = {}
+		# args.update(csrf(request))
+		args['userform'] = userform
+		args['pbguserform'] = pbguserform
 	if request.user.is_staff:
-		return render(request, 'reservations/admin/editprofile.html', {'form': form})
+		return render(request, 'reservations/admin/editprofile.html', {'userform': userform,'pbguserform':pbguserform})
 	else:
-		return render(request, 'reservations/client/editprofile.html', {'form': form})
+		return render(request, 'reservations/client/editprofile.html', {'userform': userform,'pbguserform':pbguserform})
 		

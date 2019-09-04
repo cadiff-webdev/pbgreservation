@@ -77,11 +77,11 @@
                                                     </td>
                                                     <td>{{ user.phone_number }}</td>
                                                     <td>
-                                                        <div class="table-data-feature">
-                                                            <button class="item" data-toggle="tooltip" data-placement="top" title="Send">
-                                                                <i class="zmdi zmdi-mail-send"></i>
-                                                            </button>
-                                                        </div>
+                                                            <a href="{% url 'admin:reservations_pbguser_change' {{ user.id }}%}" class="table-data-feature">
+                                                                <button class="item" data-toggle="tooltip" data-placement="top" title="Edit">
+                                                                    <i class="zmdi zmdi-edit"></i>
+                                                                </button>
+                                                            </a>
                                                     </td>
                                                 </tr>
                                                 <tr class="spacer"></tr>

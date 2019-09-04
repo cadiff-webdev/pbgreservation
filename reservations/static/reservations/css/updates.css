@@ -1,6 +1,7 @@
 .header-button{
 	position: absolute;
-	right: 4%;    
+	right: 4px;
+	top:-14px; 
 }
 
 .menu-sidebar{
@@ -27,6 +28,9 @@
 	}
 	.account-item > .content{
 		margin-left:0;
+	}
+	.header-desktop{
+		display: none;
 	}
 }
 
@@ -65,3 +69,9 @@
 	width: 100%;
 }
 /* End of forms*/
+
+/* Error boxes*/
+	div.error{
+		color:red
+	}
+/* End of error boxes*/

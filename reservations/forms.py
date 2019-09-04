@@ -109,27 +109,24 @@ class SignUpForm(UserCreationForm):
       'password2': forms.fields.TextInput(attrs={'placeholder': 'Confirm Password'})
     }
 
-
-class EditProfileForm(UserChangeForm):
-	first_name = forms.CharField(
-		max_length=30, 
-		required=False, help_text='Optional',
-		widget=forms.TextInput(attrs={'placeholder':'First Name'}
-		))
-	last_name = forms.CharField(
-		max_length=30, required=False, help_text='Optional',
-				widget=forms.TextInput(attrs={'placeholder':'Last Name'}))
-	email = forms.EmailField(max_length=254, help_text='Required. Provide a valid email address.',
-				widget=forms.TextInput(attrs={'placeholder':'Email Address'}))
-	gender_choices = [('M','Male'),('F','Female')]
-	gender = forms.CharField(max_length=1, help_text='M / F',widget=forms.RadioSelect(choices=gender_choices))
-	phone_number = forms.CharField(
-		max_length=30, 
-		required=False, help_text='Optional',
-		widget=forms.TextInput(attrs={'placeholder':'Mobile number'}
-		))
+class EditUserForm(UserChangeForm):
 	class Meta:
 		model = User
-		fields = ('username','first_name','last_name','email','gender','phone_number')
-		
+		fields = ('email','username','first_name','last_name')
+		widgets = {
+      'first_name': forms.fields.TextInput(attrs={'class': 'form-control'}),
+      'last_name': forms.fields.TextInput(attrs={'class': 'form-control'}),
+      'username': forms.fields.TextInput(attrs={'class': 'form-control'}),
+      'email': forms.fields.TextInput(attrs={'class': 'form-control'}),
+    }
+
+
+class EditPbguserForm(UserChangeForm):
+	class Meta:
+		model = Pbguser
+		fields = ('gender','phone_number')
+		widgets = {
+			'gender':forms.RadioSelect(attrs={'class': 'form-control'}),
+  		'phone_number': forms.fields.TextInput(attrs={'class': 'form-control'}),
+		}		
 

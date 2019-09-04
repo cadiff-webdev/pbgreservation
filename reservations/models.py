@@ -18,8 +18,7 @@ class Pbguser(models.Model):
 		default=None,
 		null=True
 		)
-	phone_number = models.CharField(max_length=50,
-		null=True,default=0)
+	phone_number = models.CharField(max_length=50)
 
 	@receiver(post_save,sender=User)
 	def create_user_profile(sender,instance,created,**kwargs):
