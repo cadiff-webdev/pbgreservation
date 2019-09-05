@@ -8,15 +8,37 @@ from pprint import pprint
 from itertools import chain
 from django.contrib.auth.models import User
 from django.core import serializers
+from django.core.mail import BadHeaderError, send_mail
 
 def index(request):
 	#del request.session['reservations_count']
 	#del request.session['reservations']
-
+	
+	request.session['rooms']={}
+	rooms = Accomodation.objects.all()
+	roomtypes = AccomodationType.objects.all()
+	
+	for roomtype in roomtypes:
+		rooms = rooms.filter(accomodation_type__name__exact=roomtype.name)
+		total_room_count = len(rooms)
+		vacant_room_count = len(rooms.filter(vacant=True))
+		request.session['rooms'].update({roomtype.name:vacant_room_count})
+	
 	if request.user.is_authenticated:
 		return render(request,'reservations/index.html')
 	else:
 		return redirect('login')
+
+def validate_accom(request,reservation):
+	number_of_guests=reservation['number_of_guests']
+	number_of_rooms=reservation['number_of_rooms']
+	accomodation_type=reservation['accomodation_type']
+	room_availability=request.session.get('rooms')
+	availability = int(room_availability[accomodation_type])
+	if number_of_rooms > availability:
+		return False
+	else:
+		return True
 
 def accomodation(request):
 	if request.method == 'POST':
@@ -48,9 +70,11 @@ def accomodation(request):
 				'number_of_guests':number_of_guests,
 				'number_of_rooms':number_of_rooms,
 				'accomodation_type':str(accomodation_type),
-				'accomodation_type_id':str(accomodation_type.id),
 				'branch':branch.id,
 				'todisplay':display_info}
+			vd=validate_accom(request,reservation)
+			if not vd:
+				raise forms.ValidationError("Not enough rooms")
 
 			if not request.session.get('reservations'):
 				request.session['reservations']={}
@@ -184,11 +208,11 @@ def bookreservations(request):
 			made_by = Pbguser.objects.get(pk=request.user.pbguser.id)
 			guest_id = Pbguser.objects.get(pk=request.user.pbguser.id)
 			accom_res = AccomodationReservation(status='R',start_date=sdate,end_date=edate,comments=comments,
-				made_by=made_by,guest_id=guest_id)
+				made_by=made_by,number_of_guests=number_of_guests,guest_id=guest_id)
 			accom_res.save()
 
 			reserved = ReservedAccomodation(reservation_id=accom_res,branch_id=branch,number_of_rooms=number_of_rooms,
-				number_of_guests=number_of_guests,accomodation_type_id=accomodation_type)
+				accomodation_type=accomodation_type)
 			reserved.save()
 			request.session['reservations_count']=rescount-1
 			reservationscopy.pop(key)
@@ -199,11 +223,12 @@ def bookreservations(request):
 			edate=sdate
 			visit_reason = reservation['visit_reason']
 			car_type=reservation['car_type']
-			location=reservation['location']
+			number_of_guests=reservation['number_of_guests']
+			ocation=reservation['location']
 			made_by = Pbguser.objects.get(pk=request.user.pbguser.id)
 			guest_id = Pbguser.objects.get(pk=request.user.pbguser.id)
 			trans_res = TransportReservation(status='R',start_date=sdate,end_date=edate,purpose_of_visit=visit_reason,
-				made_by=made_by,guest_id=guest_id,location=location)
+				made_by=made_by,guest_id=guest_id,location=location,number_of_guests=number_of_guests)
 			trans_res.save()
 			request.session['reservations_count']=rescount-1
 			reservationscopy.pop(key)
@@ -215,10 +240,11 @@ def bookreservations(request):
 			branch = Branch.objects.get(pk=reservation['branch'])
 			hall= ConferenceHall.objects.get(pk=reservation['hall'])
 			comments=reservation['comments']
+			number_of_guests=reservation['number_of_guests']
 			made_by = Pbguser.objects.get(pk=request.user.pbguser.id)
 			guest_id = Pbguser.objects.get(pk=request.user.pbguser.id)
 			trans_res = ConferenceReservation(status='R',start_date=sdate,end_date=edate,conference_hall_id=hall,
-				made_by=made_by,guest_id=guest_id,comments=comments)
+				made_by=made_by,guest_id=guest_id,comments=comments,number_of_guests=number_of_guests)
 			trans_res.save()
 			request.session['reservations_count']=rescount-1
 			reservationscopy.pop(key)	
@@ -229,10 +255,11 @@ def bookreservations(request):
 			edate = datetime.datetime.strptime(reservation['start_date'], "%Y-%m-%d").date()
 			comments=reservation['comments']
 			security_package=SecurityService.objects.get(pk=reservation['security_package'])
+			number_of_guests=reservation['number_of_guests']
 			made_by = Pbguser.objects.get(pk=request.user.pbguser.id)
 			guest_id = Pbguser.objects.get(pk=request.user.pbguser.id)
 			sec_res = SecurityReservation(status='R',start_date=sdate,end_date=edate,security_type=security_package,
-				made_by=made_by,guest_id=guest_id,comments=comments)
+				made_by=made_by,guest_id=guest_id,comments=comments,number_of_guests=number_of_guests)
 			sec_res.save()
 			request.session['reservations_count']=rescount-1
 			reservationscopy.pop(key)	
@@ -279,8 +306,31 @@ def clientaccount(request,user_id):
 def editreservation(request,category,res_id):
 	if(category=='accomodation'):
 		reservation = AccomodationReservation.objects.select_related().get(pk=res_id)
-		rooms = ReservedAccomodation.objects.filter(reservation_id=res_id)
-		return render(request,'reservations/admin/accom_reservation.html',{'res':reservation,'rooms':rooms})
+		roominfo = ReservedAccomodation.objects.get(reservation_id=res_id)
+		
+		if request.method == 'POST':
+			if request.POST.get("btn_approve") and not reservation.status=='A':
+				#block one room of that type and change status of the reservation
+				rooms = Accomodation.objects.filter(vacant=True,accomodation_type=roominfo.accomodation_type,branch_id=roominfo.branch_id)
+				if len(rooms)>=roominfo.number_of_rooms:
+					selected_rooms = rooms[:roominfo.number_of_rooms]
+					for room in selected_rooms:
+						room.vacant=False
+						room.save()
+					
+					reservation.status='A'
+					reservation.save()
+					#send email 
+					send_mail("TEST EMAIL", "Test email", "ericm999@hotelplus.net", ["michaelmulatz@gmail.com"])
+
+					return render(request,'reservations/admin/accom_reservation.html',{'res':reservation,'room':roominfo,'success':1})
+				else:
+					error = 'No rooms available'
+			else:
+				error = "Reservation is already approved."
+			return render(request,'reservations/admin/accom_reservation.html',{'res':reservation,'room':roominfo,'error':error})
+					
+		return render(request,'reservations/admin/accom_reservation.html',{'res':reservation,'room':roominfo})
 	elif(category=='transportation'):
 		reservation =get_object_or_404( TransportReservation,pk=res_id)
 		duration = reservation.start_date - reservation.end_date

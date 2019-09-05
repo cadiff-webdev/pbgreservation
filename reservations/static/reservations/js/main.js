@@ -79,4 +79,10 @@ const BASE_DIR = window.location.origin;
       window.location.href=BASE_DIR+this.dataset['url']
     })
 
+    $('select#id_accomodation_type').on('change',function(){
+        let roomtype = $('select#id_accomodation_type option:selected').text()
+        let availability = $(this).data("vacant-"+roomtype.toLowerCase())
+        $('input#id_number_of_rooms').attr('max',availability)   
+    })
+
 })(jQuery);

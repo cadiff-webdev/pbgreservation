@@ -18,7 +18,8 @@ class Pbguser(models.Model):
 		default=None,
 		null=True
 		)
-	phone_number = models.CharField(max_length=50)
+	phone_number = models.CharField(max_length=50,
+		null=True)
 
 	@receiver(post_save,sender=User)
 	def create_user_profile(sender,instance,created,**kwargs):
@@ -35,7 +36,8 @@ class AccomodationType(models.Model):
 	name = models.CharField(max_length=20,unique=True)
 	description = models.TextField()
 	capacity = models.PositiveIntegerField(default=0)
-
+	price = models.DecimalField(default=0.00,decimal_places=2,max_digits=5)
+	
 	def __str__(self):
 		return self.name
 
@@ -49,7 +51,7 @@ class Accomodation(models.Model):
 	room_number = models.CharField(max_length=200,unique=True)
 	vacant = models.BooleanField(default=True)
 	branch_id =  models.ForeignKey(Branch,on_delete=models.PROTECT)
-	accomodation_type_id = models.ForeignKey(AccomodationType,on_delete=models.PROTECT) 
+	accomodation_type = models.ForeignKey(AccomodationType,on_delete=models.PROTECT) 
 	description = models.CharField(max_length=200)
 	def __str__(self):
 		return self.room_number
@@ -90,7 +92,7 @@ class ReservedAccomodation(models.Model):
 	branch_id = models.ForeignKey(Branch,on_delete=models.PROTECT)
 	number_of_rooms = models.SmallIntegerField()
 	reservation_id = models.ForeignKey(AccomodationReservation,on_delete=models.PROTECT)
-	accomodation_type_id= models.ForeignKey(AccomodationType,on_delete=models.PROTECT)
+	accomodation_type= models.ForeignKey(AccomodationType,on_delete=models.PROTECT)
 
 class SecurityService(models.Model):
 	name = models.CharField(max_length=200,unique=True)

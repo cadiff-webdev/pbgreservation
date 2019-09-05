@@ -3,6 +3,18 @@
 
    
 {% block maincontent %}
+{% if success %}
+    <div class="row message-box">
+        <p>Reservation has been successfully accepted. An email with the details has been sent to the client's
+        email.</p>
+    </div>
+{% endif %}
+{% if error %}
+    <div class="row message-box">
+        <p>Something went wrong.{{ error }} </p>
+    </div>
+{% endif %}
+
     <div class="row">
         <div class="col-lg-9">
             <div class="card">
@@ -45,6 +57,7 @@
                         </div>
                        
                     </form>
+                    {{ test }}
                     <div class="table-responsive table--no-card m-b-30">
                         <table class="table table-borderless table-striped table-earning">
                             <thead>
@@ -57,15 +70,13 @@
                                 </tr>
                             </thead>
                             <tbody>
-                               {% for room in rooms %}
-                                <tr>
+                               <tr>
                                     <td>{{ res.number_of_guests }}</td>
                                     <td>{{ room.number_of_rooms }}</td>
-                                    <td>{{ room.accomodation_type_id }}</td>
-                                    <td class="text-right">$999.00</td>
-                                    <td class="text-right">$999.00</td>
+                                    <td>{{ room.accomodation_type.name }}</td>
+                                    <td class="text-right">{{ room.accomodation_type.price }}</td>
+                                    <td class="text-right">{% widthratio room.accomodation_type.price 1 room.number_of_rooms %}</td>
                                 </tr>
-                                {% endfor %}
                             </tbody>
                         </table>
                     </div>
@@ -81,14 +92,16 @@
                     <strong></strong>
                 </div>
                 <div class="card-body card-block">
-                    <form action="" method="post" class="form-horizontal">
+                    <form method="post" class="form-horizontal">
+                        {% csrf_token %}
                         <div class="row form-group">
-                            <button type="submit" class="btn btn-success col-md-12">
+                            <input type="hidden" name="reservation_id" value="{{res.id}}">
+                            <button type="submit" name="btn_approve" class="btn btn-success col-md-12 approve_accom" id="id_approve_acoom_res" data-resid="{{ res.id }}" value="1">
                                 <i class="fa fa-check-square"></i> Approve
                             </button>
                         </div>
                         <div class="row form-group">
-                            <button type="submit" class="btn btn-danger col-md-12">
+                            <button type="submit" name="btn_reject" class="btn btn-danger col-md-12"  value="1">
                                     <i class="fa fa-times"></i> Reject
                             </button>
                         </div>

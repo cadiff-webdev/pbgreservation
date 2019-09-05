@@ -218,4 +218,9 @@
 
 (function ($) {
   $('#tb_admin_dashboard').DataTable({})
+  $('.approve_accom').on('click',function(){
+    console.log($(this).data('resid'))
+    
+  })
+
 })(jQuery);

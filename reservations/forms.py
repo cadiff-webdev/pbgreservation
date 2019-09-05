@@ -6,6 +6,47 @@ from reservations.models import *
 import datetime 
 from .widgets import BootstrapDateTimePickerInput
 
+	
+class AccomodationReservationForm(forms.Form):
+	room_type= [('S','Standard Room'),('E','VIP Room'),('V','Villa')]
+	start_date = forms.DateTimeField(
+		label='CHECK IN',
+    input_formats=['%d/%m/%Y'], 
+    widget=BootstrapDateTimePickerInput(),
+    initial=datetime.date.today()
+  )
+	start_date.widget.attrs.update({'class': 'form-control'})
+	end_date = forms.DateTimeField(
+		label='CHECK OUT',
+    input_formats=['%d/%m/%Y'], 
+    widget=BootstrapDateTimePickerInput()
+  )
+	end_date.widget.attrs.update({'class': 'form-control'})
+	comments = forms.CharField(required=False,widget=forms.Textarea())
+	comments.widget.attrs.update({'class': 'commentbox form-control'})
+	branch =  forms.ModelChoiceField(Branch.objects.all())
+	branch.widget.attrs.update({'class': 'form-control'})
+	number_of_rooms = forms.IntegerField(min_value=1)
+	number_of_rooms.widget.attrs.update({'class': 'form-control'})
+	number_of_guests = forms.IntegerField(min_value=1)
+	number_of_guests.widget.attrs.update({'class': 'form-control'})
+
+
+	# extra_attrs={}
+	# rooms = Accomodation.objects.all()
+	# roomtypes = AccomodationType.objects.all()
+	
+	# for roomtype in roomtypes:
+	#		rooms = rooms.filter(accomodation_type__name__exact=roomtype.name)
+	#		total_room_count = len(rooms)
+	#		vacant_room_count = len(rooms.filter(vacant=True))
+
+	# 	extra_attrs.update({'data-vacant-'+roomtype.name:vacant_room_count})
+
+	# extra_attrs.update({'class':'form-control'})
+	# accomodation_type =  forms.ModelChoiceField(AccomodationType.objects.all(),label='ROOM TYPE')
+	# accomodation_type.widget.attrs.update(extra_attrs)
+
 class SecurityReservationForm(forms.Form):
 	start_date = forms.DateTimeField(
 		label='MEETING DATE',
@@ -58,32 +99,6 @@ class TransportationReservationForm(forms.Form):
 	visit_reason.widget.attrs.update({'class': 'form-control, commentbox'})
 	number_of_guests = forms.IntegerField(min_value=1)
 	number_of_guests.widget.attrs.update({'class': 'form-control'})
-	
-class AccomodationReservationForm(forms.Form):
-	room_type= [('S','Standard Room'),('E','VIP Room'),('V','Villa')]
-	start_date = forms.DateTimeField(
-		label='CHECK IN',
-    input_formats=['%d/%m/%Y'], 
-    widget=BootstrapDateTimePickerInput(),
-    initial=datetime.date.today()
-  )
-	start_date.widget.attrs.update({'class': 'form-control'})
-	end_date = forms.DateTimeField(
-		label='CHECK OUT',
-    input_formats=['%d/%m/%Y'], 
-    widget=BootstrapDateTimePickerInput()
-  )
-	end_date.widget.attrs.update({'class': 'form-control'})
-	comments = forms.CharField(required=False,widget=forms.Textarea())
-	comments.widget.attrs.update({'class': 'commentbox form-control'})
-	branch =  forms.ModelChoiceField(Branch.objects.all())
-	branch.widget.attrs.update({'class': 'form-control'})
-	number_of_rooms = forms.IntegerField(min_value=1)
-	number_of_rooms.widget.attrs.update({'class': 'form-control'})
-	number_of_guests = forms.IntegerField(min_value=1)
-	number_of_guests.widget.attrs.update({'class': 'form-control'})
-	accomodation_type =  forms.ModelChoiceField(AccomodationType.objects.all(),label='ROOM TYPE')
-	accomodation_type.widget.attrs.update({'class':'form-control'})
 
 
 class SignUpForm(UserCreationForm):
