@@ -77,7 +77,7 @@
                                                     </td>
                                                     <td>{{ user.phone_number }}</td>
                                                     <td>
-                                                            <a href="{% url 'admin:reservations_pbguser_change' {{ user.id }}%}" class="table-data-feature">
+                                                            <a href="{% url 'admin:reservations_pbguser_change' user.id %}" class="table-data-feature">
                                                                 <button class="item" data-toggle="tooltip" data-placement="top" title="Edit">
                                                                     <i class="zmdi zmdi-edit"></i>
                                                                 </button>

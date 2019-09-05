@@ -14,8 +14,8 @@ from django.template.loader import get_template
 from django.template import Context
 
 def index(request):
-	#del request.session['reservations_count']
-	#del request.session['reservations']
+	del request.session['reservations_count']
+	del request.session['reservations']
 	
 	request.session['rooms']={}
 	rooms = Accomodation.objects.all()
@@ -166,6 +166,7 @@ def conference(request):
 			comments = form.cleaned_data.get('comments')
 			branch = form.cleaned_data.get('branch')
 			hall = form.cleaned_data.get('hall')
+			number_of_guests = form.cleaned_data.get('number_of_guests')
 			
 			rescount = request.session.get('reservations_count', 0)
 			rescount = rescount+1
@@ -174,6 +175,7 @@ def conference(request):
 				'DATE':str(date.date()),
 				'BRANCH':str(branch.name),
 				'HALL':str(hall.name),
+				'GUESTS':number_of_guests
 				}
 			reservation = {
 				'id':rescount,
@@ -181,6 +183,7 @@ def conference(request):
 				'date':str(date.date()),
 				'branch':str(branch.id),
 				'hall':str(hall.id),
+				'number_of_guests':number_of_guests,
 				'comments':comments,
 				'todisplay':display_info}
 
@@ -366,20 +369,73 @@ def editreservation(request,category,res_id):
 	elif(category=='transportation'):
 		reservation =get_object_or_404( TransportReservation,pk=res_id)
 		duration = reservation.start_date - reservation.end_date
-		return render(request,'reservations/admin/trans_reservation.html',{'res':reservation,'duration':duration})
+		
+		if request.method == 'POST':
+			if request.POST.get("btn_approve") and not reservation.status=='A':
+					reservation.status='A'
+					reservation.save()
+					return render(request,'reservations/admin/trans_reservation.html',{'res':reservation,'duration':duration,'success':1,'msg':"Reservation Approved."})
+			elif request.POST.get("btn_reject") and not reservation.status=='D':
+				reservation.status='D'
+				reservation.save()
+				return render(request,'reservations/admin/trans_reservation.html',{'res':reservation,'duration':duration,'success':1,'msg':"Reservation Denied."})
+			elif request.POST.get("btn_cancel") and not reservation.status=='C':
+				reservation.status='C'
+				reservation.save()
+				return render(request,'reservations/admin/trans_reservation.html',{'res':reservation,'duration':duration,'success':1,'msg':"Reservation Cancelled."})
+			else:
+				error = "This action cannot be performed."
+			return render(request,'reservations/admin/trans_reservation.html',{'res':reservation,'duration':duration,'error':"Reservation Denied."})	
+		else:
+			return render(request,'reservations/admin/trans_reservation.html',{'res':reservation,'duration':duration})
 	elif(category=='security'):
 		reservation = get_object_or_404(SecurityReservation,pk=res_id)
 		duration = reservation.start_date - reservation.end_date
-		return render(request,'reservations/admin/sec_reservation.html',{'res':reservation,'duration':duration})
+		
+		if request.method == 'POST':
+			if request.POST.get("btn_approve") and not reservation.status=='A':
+					reservation.status='A'
+					reservation.save()
+					return render(request,'reservations/admin/sec_reservation.html',{'res':reservation,'duration':duration,'success':1,'msg':"Reservation Approved."})
+			elif request.POST.get("btn_reject") and not reservation.status=='D':
+				reservation.status='D'
+				reservation.save()
+				return render(request,'reservations/admin/sec_reservation.html',{'res':reservation,'duration':duration,'success':1,'msg':"Reservation Denied."})
+			elif request.POST.get("btn_cancel") and not reservation.status=='C':
+				reservation.status='C'
+				reservation.save()
+				return render(request,'reservations/admin/sec_reservation.html',{'res':reservation,'duration':duration,'success':1,'msg':"Reservation Cancelled."})
+			else:
+				error = "This action cannot be performed."
+			return render(request,'reservations/admin/sec_reservation.html',{'res':reservation,'duration':duration,'error':"Reservation Denied."})	
+		else:
+			return render(request,'reservations/admin/sec_reservation.html',{'res':reservation,'duration':duration})
 	elif(category=='conference'):
 		reservation = get_object_or_404(ConferenceReservation,pk=res_id)
 		duration = reservation.start_date - reservation.end_date
-		return render(request,'reservations/admin/conf_reservation.html',{'res':reservation,'duration':duration})
+		if request.method == 'POST':
+			if request.POST.get("btn_approve") and not reservation.status=='A':
+					reservation.status='A'
+					reservation.save()
+					return render(request,'reservations/admin/conf_reservation.html',{'res':reservation,'duration':duration,'success':1,'msg':"Reservation Approved."})
+			elif request.POST.get("btn_reject") and not reservation.status=='D':
+				reservation.status='D'
+				reservation.save()
+				return render(request,'reservations/admin/conf_reservation.html',{'res':reservation,'duration':duration,'success':1,'msg':"Reservation Denied."})
+			elif request.POST.get("btn_cancel") and not reservation.status=='C':
+				reservation.status='C'
+				reservation.save()
+				return render(request,'reservations/admin/conf_reservation.html',{'res':reservation,'duration':duration,'success':1,'msg':"Reservation Cancelled."})
+			else:
+				error = "This action cannot be performed."
+			return render(request,'reservations/admin/conf_reservation.html',{'res':reservation,'duration':duration,'error':"Reservation Denied."})	
+		else:
+			return render(request,'reservations/admin/conf_reservation.html',{'res':reservation,'duration':duration})
 	else:
 		return render(request,'reservations/admin/dashboard.html')
 def testemail(request):
 	return render(request,'reservations/email_reservation_confirmed.html')
-	
+
 def clientdashboard(request,category):
 	guest = Pbguser.objects.get(pk=request.user.pbguser.id)
 	

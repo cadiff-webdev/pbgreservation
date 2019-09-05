@@ -81,8 +81,13 @@ const BASE_DIR = window.location.origin;
 
     $('select#id_accomodation_type').on('change',function(){
         let roomtype = $('select#id_accomodation_type option:selected').text()
-        let availability = $(this).data("vacant-"+roomtype.toLowerCase())
-        $('input#id_number_of_rooms').attr('max',availability)   
+        roomtype = roomtype.toLowerCase().split(' ').join('')
+        let availability = $(this).data("vacant-"+roomtype)
+        console.log(availability,roomtype)
+        $('input#id_number_of_rooms').attr('max',availability) 
+        if( $('input#id_number_of_rooms').val() > availability ){
+            $('input#id_number_of_rooms').val(availability)
+        }
     })
 
 })(jQuery);

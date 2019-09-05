@@ -3,6 +3,17 @@
 
    
 {% block maincontent %}
+{% if success %}
+    <div class="row message-box">
+        <p>{{ msg }}</p>
+    </div>
+{% endif %}
+{% if error %}
+    <div class="row message-box">
+        <p>Error : {{ error }} </p>
+    </div>
+{% endif %}
+
     <div class="row">
         <div class="col-lg-9">
             <div class="card">
@@ -79,26 +90,33 @@
                     <strong></strong>
                 </div>
                 <div class="card-body card-block">
-                    <form action="" method="post" class="form-horizontal">
+                    <form method="post" class="form-horizontal">
+                        {% csrf_token %}
                         <div class="row form-group">
-                            <button type="submit" class="btn btn-success col-md-12">
-                                <i class="fa fa-dot-circle-o"></i> Approve
+                            <input type="hidden" name="reservation_id" value="{{res.id}}">
+                            <button type="submit" name="btn_approve" class="btn btn-success col-md-12 approve_accom" id="id_approve_acoom_res" data-resid="{{ res.id }}" value="1">
+                                <i class="fa fa-check-square"></i> Approve
                             </button>
                         </div>
                         <div class="row form-group">
-                            <button type="submit" class="btn btn-danger col-md-12">
-                                    <i class="fa fa-dot-circle-o"></i> Reject
+                            <button type="submit" name="btn_reject" class="btn btn-danger col-md-12"  value="1">
+                                <i class="fa fa-times"></i> Reject
                             </button>
                         </div>
                         <div class="row form-group">
-                            <button type="submit" class="btn btn-warning col-md-12">
-                                <i class="fa fa-dot-circle-o"></i> Cancel
+                            <button type="submit" name="btn_cancel" class="btn btn-warning col-md-12" value="1">
+                                <i class="fa fa-times"></i> Cancel
                             </button>
                         </div>
                         <div class="row form-group">
                             <button type="submit" class="btn btn-info col-md-12">
-                                <i class="fa fa-dot-circle-o"></i> Email Details
+                                <i class="fa fa-envelope"></i> Email Details
                             </button>
+                        </div>
+                        <div class="row form-group">
+                            <a href="{% url 'reservations:admindashboard' 'all' %}"><button class="btn btn-secondary col-md-12">
+                                <i class="fa fa-arrow-left"></i> Return to Dashboard
+                            </button></a>
                         </div>
                     </form>
                 </div>
