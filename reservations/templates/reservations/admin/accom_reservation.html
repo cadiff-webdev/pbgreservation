@@ -5,13 +5,12 @@
 {% block maincontent %}
 {% if success %}
     <div class="row message-box">
-        <p>Reservation has been successfully accepted. An email with the details has been sent to the client's
-        email.</p>
+        <p>{{ msg }}</p>
     </div>
 {% endif %}
 {% if error %}
     <div class="row message-box">
-        <p>Something went wrong.{{ error }} </p>
+        <p>Error : {{ error }} </p>
     </div>
 {% endif %}
 
@@ -102,11 +101,11 @@
                         </div>
                         <div class="row form-group">
                             <button type="submit" name="btn_reject" class="btn btn-danger col-md-12"  value="1">
-                                    <i class="fa fa-times"></i> Reject
+                                <i class="fa fa-times"></i> Reject
                             </button>
                         </div>
                         <div class="row form-group">
-                            <button type="submit" class="btn btn-warning col-md-12">
+                            <button type="submit" name="btn_cancel" class="btn btn-warning col-md-12" value="1">
                                 <i class="fa fa-times"></i> Cancel
                             </button>
                         </div>
@@ -114,6 +113,11 @@
                             <button type="submit" class="btn btn-info col-md-12">
                                 <i class="fa fa-envelope"></i> Email Details
                             </button>
+                        </div>
+                        <div class="row form-group">
+                            <a href="{% url 'reservations:admindashboard' 'all' %}"><button class="btn btn-secondary col-md-12">
+                                <i class="fa fa-arrow-left"></i> Return to Dashboard
+                            </button></a>
                         </div>
                     </form>
                 </div>

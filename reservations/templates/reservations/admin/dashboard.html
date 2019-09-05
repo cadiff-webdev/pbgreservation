@@ -41,12 +41,7 @@
                         <table class="table table-data2" id="tb_admin_dashboard">
                             <thead>
                                 <tr>
-                                    <th>
-                                        <label class="au-checkbox">
-                                            <input type="checkbox">
-                                            <span class="au-checkmark"></span>
-                                        </label>
-                                    </th>
+                                    <th>id</th>
                                     <th>name</th>
                                     <th>email</th>
                                     <th>service</th>
@@ -59,12 +54,7 @@
                             <tbody>
                                 {% for res in reservations %}
                                     <tr class="tr-shadow">
-                                        <td>
-                                            <label class="au-checkbox">
-                                                <input type="checkbox">
-                                                <span class="au-checkmark"></span>
-                                            </label>
-                                        </td>
+                                        <td>{{ res.id }}</td>
                                         <td>{{ res.guest_id.user.get_full_name }}</td>
                                         <td>
                                             <span class="block-email">{{ res.guest_id.user.email }}</span>

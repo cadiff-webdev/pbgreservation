@@ -8,6 +8,7 @@ urlpatterns = [
     path('transportation',views.transportation, name='transportationform'),
     path('security',views.security, name='securityform'),
     path('conference',views.conference,name='conferenceform'),
+    path('email',views.testemail,name='testemail'),
    
     path('admin/edit/<slug:category>/<int:res_id>/',views.editreservation,name='edit_reservation'),
     path('dashboard/account/',views.editprofile,name='editprofile'),

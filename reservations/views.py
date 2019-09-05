@@ -8,7 +8,10 @@ from pprint import pprint
 from itertools import chain
 from django.contrib.auth.models import User
 from django.core import serializers
-from django.core.mail import BadHeaderError, send_mail
+from django.core.mail import BadHeaderError, send_mail, EmailMultiAlternatives
+from django.conf import settings
+from django.template.loader import get_template
+from django.template import Context
 
 def index(request):
 	#del request.session['reservations_count']
@@ -307,7 +310,8 @@ def editreservation(request,category,res_id):
 	if(category=='accomodation'):
 		reservation = AccomodationReservation.objects.select_related().get(pk=res_id)
 		roominfo = ReservedAccomodation.objects.get(reservation_id=res_id)
-		
+		error =''
+		msg=''
 		if request.method == 'POST':
 			if request.POST.get("btn_approve") and not reservation.status=='A':
 				#block one room of that type and change status of the reservation
@@ -321,13 +325,41 @@ def editreservation(request,category,res_id):
 					reservation.status='A'
 					reservation.save()
 					#send email 
-					send_mail("TEST EMAIL", "Test email", "ericm999@hotelplus.net", ["michaelmulatz@gmail.com"])
+					html_message = get_template('reservations/email_reservation_confirmed.html')
 
-					return render(request,'reservations/admin/accom_reservation.html',{'res':reservation,'room':roominfo,'success':1})
+					subject = "TEST EMAIL"
+					text_message = "Test email"
+					recepients = ["michaelmulatya@hotmail.com"]
+					sender = settings.EMAIL_HOST_USER
+					email_msg = EmailMultiAlternatives(subject, text_message, sender, recepients)
+					email_msg.attach_alternative(html_message.render({'reservation':reservation}), "text/html")	
+					email_msg.send()
+
+					msg="Reservation Accepted. A confirmation email has been sent to the guest."
+					return render(request,'reservations/admin/accom_reservation.html',{'res':reservation,'room':roominfo,'success':1,'msg':msg})
 				else:
 					error = 'No rooms available'
+			elif request.POST.get("btn_reject") and not reservation.status=='D':
+				#change status of reservation to Denied
+				reservation.status='D'
+				reservation.save()
+				return render(request,'reservations/admin/accom_reservation.html',{'res':reservation,'room':roominfo,'success':1,'msg':'Reservation denied.'})
+			elif request.POST.get("btn_cancel") and not reservation.status=='C':
+				#change status of reservation to Cancelled. Unblock rooms
+				rooms = Accomodation.objects.filter(vacant=False,accomodation_type=roominfo.accomodation_type,branch_id=roominfo.branch_id)
+				if len(rooms)>=roominfo.number_of_rooms:
+					selected_rooms = rooms[:roominfo.number_of_rooms]
+					for room in selected_rooms:
+						room.vacant=True
+						room.save()
+					
+					reservation.status='C'
+					reservation.save()
+					return render(request,'reservations/admin/accom_reservation.html',{'res':reservation,'room':roominfo,'success':1,'msg':'Reservation cancelled.'})
+				else:
+					error = "No booked rooms to unblock."
 			else:
-				error = "Reservation is already approved."
+				error = "This action has already been performed."
 			return render(request,'reservations/admin/accom_reservation.html',{'res':reservation,'room':roominfo,'error':error})
 					
 		return render(request,'reservations/admin/accom_reservation.html',{'res':reservation,'room':roominfo})
@@ -345,7 +377,9 @@ def editreservation(request,category,res_id):
 		return render(request,'reservations/admin/conf_reservation.html',{'res':reservation,'duration':duration})
 	else:
 		return render(request,'reservations/admin/dashboard.html')
-
+def testemail(request):
+	return render(request,'reservations/email_reservation_confirmed.html')
+	
 def clientdashboard(request,category):
 	guest = Pbguser.objects.get(pk=request.user.pbguser.id)
 	
