@@ -14,8 +14,8 @@ from django.template.loader import get_template
 from django.template import Context
 
 def index(request):
-	del request.session['reservations_count']
-	del request.session['reservations']
+	#del request.session['reservations_count']
+	#del request.session['reservations']
 	
 	request.session['rooms']={}
 	rooms = Accomodation.objects.all()
