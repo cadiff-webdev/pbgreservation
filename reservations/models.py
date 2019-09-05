@@ -74,7 +74,7 @@ class ConferenceHall(models.Model):
 class Reservation(models.Model):
 	status_options=[('P','Pending'),('A','Accepted'),('D','Denied'),('C','Cancelled')]
 	status = models.CharField(choices=status_options,max_length=1)
-	start_date = models.DateTimeField()
+	start_date = models.DateField()
 	end_date = models.DateField()
 	number_of_guests = models.SmallIntegerField()
 	comments = models.TextField()
