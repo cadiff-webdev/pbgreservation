@@ -140,7 +140,7 @@ STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'mail.kilelehomestay.com'
+EMAIL_HOST = 'az1-ss19.a2hosting.com'
 EMAIL_USE_SSL = True
 EMAIL_PORT = 456
 EMAIL_HOST_USER = 'pbg@pbgtest.kilelehomestay.com'
