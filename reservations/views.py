@@ -1,4 +1,3 @@
-from django.shortcuts import render
 from .models import *
 from django.urls import reverse, reverse_lazy
 from django.shortcuts import render,get_object_or_404,redirect
@@ -13,6 +12,10 @@ from django.conf import settings
 from django.template.loader import get_template
 from django.template import Context
 from django.contrib.auth.decorators import login_required
+from .tokens import account_activation_token
+from django.contrib.sites.shortcuts import get_current_site
+from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
+from django.utils.encoding import force_bytes, force_text
 
 @login_required()
 def index(request):
@@ -534,26 +537,33 @@ def editreservation(request,category,res_id):
 		return render(request,'reservations/admin/dashboard.html')
 
 def testemail(request):
-	reservation = AccomodationReservation.objects.get(pk=2)
-	roominfo = ReservedAccomodation.objects.get(reservation_id=2)
+	# reservation = AccomodationReservation.objects.get(pk=2)
+	# roominfo = ReservedAccomodation.objects.get(reservation_id=2)
 		
-	reslabels={'label1':'CHECK IN',
-			'label2':'CHECK OUT',
-			'label3':'GUESTS',
-			'label4':'ROOM TYPE',
-			'label5':'ROOMS',
-			'label6':'PRICE'}
-	resdata = {
-			'id':reservation.id,
-			'data1':reservation.start_date,
-			'data2':reservation.end_date,
-			'data3':reservation.number_of_guests,
-			'data4':roominfo.accomodation_type,
-			'data5':roominfo.number_of_rooms,
-			'data6':roominfo.accomodation_type.price
-			}
+	# reslabels={'label1':'CHECK IN',
+	# 		'label2':'CHECK OUT',
+	# 		'label3':'GUESTS',
+	# 		'label4':'ROOM TYPE',
+	# 		'label5':'ROOMS',
+	# 		'label6':'PRICE'}
+	# resdata = {
+	# 		'id':reservation.id,
+	# 		'data1':reservation.start_date,
+	# 		'data2':reservation.end_date,
+	# 		'data3':reservation.number_of_guests,
+	# 		'data4':roominfo.accomodation_type,
+	# 		'data5':roominfo.number_of_rooms,
+	# 		'data6':roominfo.accomodation_type.price
+	# 		}
 
-	return render(request,'reservations/email_reservation_confirmed.html',{'reslabels':reslabels,'resdata':resdata})
+	# return render(request,'reservations/email_reservation_confirmed.html',{'reslabels':reslabels,'resdata':resdata})
+	user = Pbguser.objects.get(pk=1).user	
+	current_site = get_current_site(request)
+         
+	return render(request,'reservations/email_account_activation.html',{'user':user,
+          	'domain':current_site,
+            'uid':urlsafe_base64_encode(force_bytes(user.pk)),
+            'token':account_activation_token.make_token(user)})
 
 @login_required()
 def clientdashboard(request,category):
@@ -584,14 +594,32 @@ def signup(request):
   if request.method == 'POST':
       form = SignUpForm(request.POST)
       if form.is_valid():
-          user = form.save()
+          user = form.save(commit=False)
+          user.is_active = False
           user.refresh_from_db()
           user.pbguser.gender = form.cleaned_data.get('gender')
           user.save()
-          username = form.cleaned_data.get('username')
-          raw_password = form.cleaned_data.get('password1')
-          user = authenticate(username=username, password=raw_password)
-          login(request, user)
+          current_site = get_current_site(request)
+          
+          html_message = get_template('reservations/email_account_activation.html')
+          subject = 'PBG: Activate your account.'
+          text_message = "Activate your account by clicking on the button."
+          recepients = [form.cleaned_data.get('email')]
+          sender = settings.EMAIL_HOST_USER
+          email_msg = EmailMultiAlternatives(subject, text_message, sender, recepients)
+          email_msg.attach_alternative(html_message.render({
+          	'user':user,
+          	'domain':current_site,
+            'uid':urlsafe_base64_encode(force_bytes(user.pk)),
+            'token':account_activation_token.make_token(user),
+           }), "text/html")
+          email_msg.send()  
+          
+          # username = form.cleaned_data.get('username')
+          # raw_password = form.cleaned_data.get('password1')
+          # user = authenticate(username=username, password=raw_password)
+          # login(request, user)
+          
           return redirect('reservations:index')
   else:
       form = SignUpForm()
