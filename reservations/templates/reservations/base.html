@@ -81,12 +81,13 @@
 						</nav>
 			      {% endblock %}
 			      </div>
-			    <h4>Reservations{% if request.session.reservations_count > 0 %}
-						  ({{ request.session.reservations_count }})</h4>
-						{% endif %}
-					</h4>
+			  
 
 				  {% block sidebar %}
+					  <h4>Reservations{% if request.session.reservations_count > 0 %}
+						  ({{ request.session.reservations_count }})</h4>
+						{% endif %}
+						</h4>
 						{% if request.session.reservations_count <= 0 or not request.session.reservations_count %}
 							<h6>No pending reservations.</h6>
 						{% endif %}

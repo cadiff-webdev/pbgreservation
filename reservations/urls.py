@@ -14,7 +14,8 @@ urlpatterns = [
     path('dashboard/account/',views.editprofile,name='editprofile'),
     re_path(r'^dashboard/(?P<category>[\w]*)/',views.clientdashboard,name='clientdashboard'),
     re_path(r'^admin/list/(?P<category>[\w]*)/',views.admindashboard,name='admindashboard'),
-    
+    re_path(r'^activate/(?P<uidb64>[0-9A-Za-z_\-]+)/(?P<token>[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,20})/$',
+        views.activate, name='activate'),
     path('admin/users/',views.userslist,name='users'),
     path('signup/',views.signup,name='signup'),
     path('book/',views.bookreservations,name='book'),

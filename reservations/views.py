@@ -16,6 +16,7 @@ from .tokens import account_activation_token
 from django.contrib.sites.shortcuts import get_current_site
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.utils.encoding import force_bytes, force_text
+from django.http import HttpResponse
 
 @login_required()
 def index(request):
@@ -361,14 +362,15 @@ def editreservation(request,category,res_id):
 						'data5':roominfo.number_of_rooms,
 						'data6':roominfo.accomodation_type.price
 						}
-					
+					current_site = get_current_site(request)
+  
 					html_message = get_template('reservations/email_reservation_confirmed.html')
 					subject = "RESERVATION CONFIRMED"
 					text_message = "Your reservation # %s has been approved. We look forward to hosting you."
 					recepients = [reservation.guest_id.user.email]
 					sender = settings.EMAIL_HOST_USER
 					email_msg = EmailMultiAlternatives(subject, text_message, sender, recepients)
-					email_msg.attach_alternative(html_message.render({'reslabels':reslabels,'resdata':resdata}), "text/html")	
+					email_msg.attach_alternative(html_message.render({'reslabels':reslabels,'resdata':resdata,'domain':current_site}), "text/html")	
 					email_msg.send()
 
 					msg="Reservation Accepted. A confirmation email has been sent to the guest."
@@ -420,14 +422,15 @@ def editreservation(request,category,res_id):
 						'data3':reservation.car_type,
 						'data4':reservation.location
 						}
-					
+					current_site = get_current_site(request)
+  
 					html_message = get_template('reservations/email_reservation_confirmed.html')
 					subject = "RESERVATION CONFIRMED"
 					text_message = "Your reservation # %s has been approved. We look forward to hosting you."
 					recepients = [reservation.guest_id.user.email]
 					sender = settings.EMAIL_HOST_USER
 					email_msg = EmailMultiAlternatives(subject, text_message, sender, recepients)
-					email_msg.attach_alternative(html_message.render({'reslabels':reslabels,'resdata':resdata}), "text/html")	
+					email_msg.attach_alternative(html_message.render({'reslabels':reslabels,'resdata':resdata,'domain':current_site}), "text/html")	
 					email_msg.send()
 
 					return render(request,'reservations/admin/trans_reservation.html',{'res':reservation,'duration':duration,'success':1,'msg':"Reservation Approved."})
@@ -466,13 +469,14 @@ def editreservation(request,category,res_id):
 						'data4':reservation.security_type
 						}
 					
+					current_site = get_current_site(request)
 					html_message = get_template('reservations/email_reservation_confirmed.html')
 					subject = "RESERVATION CONFIRMED"
 					text_message = "Your reservation # %s has been approved. We look forward to hosting you."
 					recepients = [reservation.guest_id.user.email]
 					sender = settings.EMAIL_HOST_USER
 					email_msg = EmailMultiAlternatives(subject, text_message, sender, recepients)
-					email_msg.attach_alternative(html_message.render({'reslabels':reslabels,'resdata':resdata}), "text/html")	
+					email_msg.attach_alternative(html_message.render({'reslabels':reslabels,'resdata':resdata,'domain':current_site}), "text/html")	
 					email_msg.send()
 
 					return render(request,'reservations/admin/sec_reservation.html',{'res':reservation,'duration':duration,'success':1,'msg':"Reservation Approved."})
@@ -509,14 +513,15 @@ def editreservation(request,category,res_id):
 						'data3':reservation.number_of_guests,
 						'data4':reservation.conference_hall_id
 						}
-					
+					current_site = get_current_site(request)
+  
 					html_message = get_template('reservations/email_reservation_confirmed.html')
 					subject = "RESERVATION CONFIRMED"
 					text_message = "Your reservation # %s has been approved. We look forward to hosting you."
 					recepients = [reservation.guest_id.user.email]
 					sender = settings.EMAIL_HOST_USER
 					email_msg = EmailMultiAlternatives(subject, text_message, sender, recepients)
-					email_msg.attach_alternative(html_message.render({'reslabels':reslabels,'resdata':resdata}), "text/html")	
+					email_msg.attach_alternative(html_message.render({'reslabels':reslabels,'resdata':resdata,'domain':current_site}), "text/html")	
 					email_msg.send()
 
 					return render(request,'reservations/admin/conf_reservation.html',{'res':reservation,'duration':duration,'success':1,'msg':"Reservation Approved."})
@@ -557,7 +562,7 @@ def testemail(request):
 	# 		}
 
 	# return render(request,'reservations/email_reservation_confirmed.html',{'reslabels':reslabels,'resdata':resdata})
-	user = Pbguser.objects.get(pk=1).user	
+	user = Pbguser.objects.get(user__username="latts").user	
 	current_site = get_current_site(request)
          
 	return render(request,'reservations/email_account_activation.html',{'user':user,
@@ -589,12 +594,26 @@ def clientdashboard(request,category):
 
 	return render(request,'reservations/client/dashboard.html',{'reservations':reservations})
 
-@login_required()
+def activate(request, uidb64, token):
+	try:
+		uid = force_text(urlsafe_base64_decode(uidb64))
+		user = User.objects.get(pk=uid)
+	except(TypeError, ValueError, OverflowError, User.DoesNotExist):
+		user = None
+	if user is not None and account_activation_token.check_token(user, token):
+		user.is_active = True
+		user.save()
+		login(request, user)
+		# return redirect('home')
+		return redirect('reservations:index')
+	else:
+		return HttpResponse('Activation link is invalid!')
+
 def signup(request):
   if request.method == 'POST':
       form = SignUpForm(request.POST)
       if form.is_valid():
-          user = form.save(commit=False)
+          user = form.save()
           user.is_active = False
           user.refresh_from_db()
           user.pbguser.gender = form.cleaned_data.get('gender')
@@ -620,7 +639,7 @@ def signup(request):
           # user = authenticate(username=username, password=raw_password)
           # login(request, user)
           
-          return redirect('reservations:index')
+          return render(request,'reservations/awaiting_activation.html')
   else:
       form = SignUpForm()
   return render(request, 'registration/signup.html', {'form': form})
