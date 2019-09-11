@@ -216,7 +216,7 @@
 <div style="color:#000000;font-family:'Lato', Tahoma, Verdana, Segoe, sans-serif;line-height:120%;padding-top:10px;padding-right:10px;padding-bottom:30px;padding-left:10px;">
 <div style="font-size: 12px; line-height: 14px; font-family: 'Lato', Tahoma, Verdana, Segoe, sans-serif; color: #000000;">
 
-<p style="font-size: 14px; line-height: 16px; text-align: center; margin: 0;"><strong><span style="font-size: 18px; line-height: 21px;">Your reservation [ {{ reservation.id }} ] has been confirmed</span></strong><strong><span style="font-size: 18px; line-height: 21px;">!</span></strong></p>
+<p style="font-size: 14px; line-height: 16px; text-align: center; margin: 0;"><strong><span style="font-size: 18px; line-height: 21px;">Your {{ reslabels.type }} reservation # {{ resdata.id }} has been confirmed</span></strong><strong><span style="font-size: 18px; line-height: 21px;">!</span></strong></p>
 </div>
 </div>
 <!--[if mso]></td></tr></table><![endif]-->
@@ -252,7 +252,7 @@
 <!--[if mso]><table width="100%" cellpadding="0" cellspacing="0" border="0"><tr><td style="padding-right: 10px; padding-left: 10px; padding-top: 10px; padding-bottom: 10px; font-family: Tahoma, Verdana, sans-serif"><![endif]-->
 <div style="color:#71777D;font-family:'Lato', Tahoma, Verdana, Segoe, sans-serif;line-height:150%;padding-top:10px;padding-right:10px;padding-bottom:10px;padding-left:10px;">
 <div style="font-size: 12px; line-height: 18px; font-family: 'Lato', Tahoma, Verdana, Segoe, sans-serif; color: #71777D;">
-<p style="font-size: 14px; line-height: 21px; text-align: center; margin: 0;"><span style="text-decoration: underline; font-size: 14px; line-height: 21px;"><span style="color: #000000; font-size: 14px; line-height: 21px;"><strong>RESERVATION DETAILS</strong></span></span></p>
+<p style="font-size: 14px; line-height: 21px; text-align: center; margin: 0;"><span style="text-decoration: underline; font-size: 14px; line-height: 21px;"><span style="color: #000000; font-size: 14px; line-height: 21px;"><strong>{{ reslabels.type }}RESERVATION DETAILS</strong></span></span></p>
 </div>
 </div>
 <!--[if mso]></td></tr></table><![endif]-->
@@ -279,21 +279,21 @@
 <!--[if mso]><table width="100%" cellpadding="0" cellspacing="0" border="0"><tr><td style="padding-right: 10px; padding-left: 10px; padding-top: 10px; padding-bottom: 10px; font-family: Tahoma, Verdana, sans-serif"><![endif]-->
 <div style="color:#555555;font-family:'Lato', Tahoma, Verdana, Segoe, sans-serif;line-height:120%;padding-top:10px;padding-right:10px;padding-bottom:10px;padding-left:10px;">
 <div style="font-family: 'Lato', Tahoma, Verdana, Segoe, sans-serif; font-size: 12px; line-height: 14px; color: #555555;">
-<p style="font-size: 12px; line-height: 14px; margin: 0;"><strong>CHECK IN:</strong></p>
+<p style="font-size: 12px; line-height: 14px; margin: 0;"><strong>{{ reslabels.label1 }}</strong></p>
 </div>
 </div>
 <!--[if mso]></td></tr></table><![endif]-->
 <!--[if mso]><table width="100%" cellpadding="0" cellspacing="0" border="0"><tr><td style="padding-right: 10px; padding-left: 10px; padding-top: 10px; padding-bottom: 10px; font-family: Tahoma, Verdana, sans-serif"><![endif]-->
 <div style="color:#555555;font-family:'Lato', Tahoma, Verdana, Segoe, sans-serif;line-height:120%;padding-top:10px;padding-right:10px;padding-bottom:10px;padding-left:10px;">
 <div style="font-family: 'Lato', Tahoma, Verdana, Segoe, sans-serif; font-size: 12px; line-height: 14px; color: #555555;">
-<p style="font-size: 12px; line-height: 14px; margin: 0;"><strong>GUESTS:</strong></p>
+<p style="font-size: 12px; line-height: 14px; margin: 0;"><strong>{{ reslabels.label2 }}</strong></p>
 </div>
 </div>
 <!--[if mso]></td></tr></table><![endif]-->
 <!--[if mso]><table width="100%" cellpadding="0" cellspacing="0" border="0"><tr><td style="padding-right: 10px; padding-left: 10px; padding-top: 10px; padding-bottom: 10px; font-family: Tahoma, Verdana, sans-serif"><![endif]-->
 <div style="color:#555555;font-family:'Lato', Tahoma, Verdana, Segoe, sans-serif;line-height:120%;padding-top:10px;padding-right:10px;padding-bottom:10px;padding-left:10px;">
 <div style="font-family: 'Lato', Tahoma, Verdana, Segoe, sans-serif; font-size: 12px; line-height: 14px; color: #555555;">
-<p style="font-size: 12px; line-height: 14px; margin: 0;"><strong>ROOM TYPE:</strong></p>
+<p style="font-size: 12px; line-height: 14px; margin: 0;"><strong>{{ reslabels.label3 }}</strong></p>
 </div>
 </div>
 <!--[if mso]></td></tr></table><![endif]-->
@@ -312,20 +312,20 @@
 <!--[if mso]><table width="100%" cellpadding="0" cellspacing="0" border="0"><tr><td style="padding-right: 10px; padding-left: 10px; padding-top: 10px; padding-bottom: 10px; font-family: Tahoma, Verdana, sans-serif"><![endif]-->
 <div style="color:#555555;font-family:'Lato', Tahoma, Verdana, Segoe, sans-serif;line-height:120%;padding-top:10px;padding-right:10px;padding-bottom:10px;padding-left:10px;">
 <div style="font-family: 'Lato', Tahoma, Verdana, Segoe, sans-serif; font-size: 12px; line-height: 14px; color: #555555;">
-<p style="font-size: 12px; line-height: 14px; margin: 0;">{{ reservation.start_date }}</p>
+<p style="font-size: 12px; line-height: 14px; margin: 0;">{{ resdata.data1 }}</p>
 </div>
 </div>
 <!--[if mso]></td></tr></table><![endif]-->
 <!--[if mso]><table width="100%" cellpadding="0" cellspacing="0" border="0"><tr><td style="padding-right: 10px; padding-left: 10px; padding-top: 10px; padding-bottom: 10px; font-family: Tahoma, Verdana, sans-serif"><![endif]-->
 <div style="color:#555555;font-family:'Lato', Tahoma, Verdana, Segoe, sans-serif;line-height:120%;padding-top:10px;padding-right:10px;padding-bottom:10px;padding-left:10px;">
 <div style="font-family: 'Lato', Tahoma, Verdana, Segoe, sans-serif; font-size: 12px; line-height: 14px; color: #555555;">
-<p style="font-size: 14px; line-height: 16px; margin: 0;">{{ reservation.number_of_guests }}</p>
+<p style="font-size: 14px; line-height: 16px; margin: 0;">{{ resdata.data2 }}</p>
 </div>
 </div>
 <!--[if mso]></td></tr></table><![endif]-->
 <!--[if mso]><table width="100%" cellpadding="0" cellspacing="0" border="0"><tr><td style="padding-right: 10px; padding-left: 10px; padding-top: 10px; padding-bottom: 10px; font-family: Tahoma, Verdana, sans-serif"><![endif]-->
 <div style="color:#555555;font-family:'Lato', Tahoma, Verdana, Segoe, sans-serif;line-height:120%;padding-top:10px;padding-right:10px;padding-bottom:10px;padding-left:10px;">
-<p style="font-size: 12px; line-height: 14px; color: #555555; font-family: 'Lato', Tahoma, Verdana, Segoe, sans-serif; margin: 0;">{{ roominfo.accomodation_type }}</p>
+<p style="font-size: 12px; line-height: 14px; color: #555555; font-family: 'Lato', Tahoma, Verdana, Segoe, sans-serif; margin: 0;">{{ resdata.data3 }}</p>
 </div>
 <!--[if mso]></td></tr></table><![endif]-->
 <!--[if (!mso)&(!IE)]><!-->
@@ -343,21 +343,21 @@
 <!--[if mso]><table width="100%" cellpadding="0" cellspacing="0" border="0"><tr><td style="padding-right: 10px; padding-left: 10px; padding-top: 10px; padding-bottom: 10px; font-family: Tahoma, Verdana, sans-serif"><![endif]-->
 <div style="color:#555555;font-family:'Lato', Tahoma, Verdana, Segoe, sans-serif;line-height:120%;padding-top:10px;padding-right:10px;padding-bottom:10px;padding-left:10px;">
 <div style="font-family: 'Lato', Tahoma, Verdana, Segoe, sans-serif; font-size: 12px; line-height: 14px; color: #555555;">
-<p style="font-size: 12px; line-height: 14px; margin: 0;"><strong>CHECK OUT:</strong></p>
+<p style="font-size: 12px; line-height: 14px; margin: 0;"><strong>{{ reslabels.label4 }}</strong></p>
 </div>
 </div>
 <!--[if mso]></td></tr></table><![endif]-->
 <!--[if mso]><table width="100%" cellpadding="0" cellspacing="0" border="0"><tr><td style="padding-right: 10px; padding-left: 10px; padding-top: 10px; padding-bottom: 10px; font-family: Tahoma, Verdana, sans-serif"><![endif]-->
 <div style="color:#555555;font-family:'Lato', Tahoma, Verdana, Segoe, sans-serif;line-height:120%;padding-top:10px;padding-right:10px;padding-bottom:10px;padding-left:10px;">
 <div style="font-family: 'Lato', Tahoma, Verdana, Segoe, sans-serif; font-size: 12px; line-height: 14px; color: #555555;">
-<p style="font-size: 12px; line-height: 14px; margin: 0;"><strong>ROOMS:</strong></p>
+<p style="font-size: 12px; line-height: 14px; margin: 0;"><strong>{{ reslabels.label5 }}</strong></p>
 </div>
 </div>
 <!--[if mso]></td></tr></table><![endif]-->
 <!--[if mso]><table width="100%" cellpadding="0" cellspacing="0" border="0"><tr><td style="padding-right: 10px; padding-left: 10px; padding-top: 10px; padding-bottom: 10px; font-family: Tahoma, Verdana, sans-serif"><![endif]-->
 <div style="color:#555555;font-family:'Lato', Tahoma, Verdana, Segoe, sans-serif;line-height:120%;padding-top:10px;padding-right:10px;padding-bottom:10px;padding-left:10px;">
 <div style="font-family: 'Lato', Tahoma, Verdana, Segoe, sans-serif; font-size: 12px; line-height: 14px; color: #555555;">
-<p style="font-size: 12px; line-height: 14px; margin: 0;"><strong>PRICE:</strong></p>
+<p style="font-size: 12px; line-height: 14px; margin: 0;"><strong>{{ reslabels.label6 }}</strong></p>
 </div>
 </div>
 <!--[if mso]></td></tr></table><![endif]-->
@@ -376,21 +376,21 @@
 <!--[if mso]><table width="100%" cellpadding="0" cellspacing="0" border="0"><tr><td style="padding-right: 10px; padding-left: 10px; padding-top: 10px; padding-bottom: 10px; font-family: Tahoma, Verdana, sans-serif"><![endif]-->
 <div style="color:#555555;font-family:'Lato', Tahoma, Verdana, Segoe, sans-serif;line-height:120%;padding-top:10px;padding-right:10px;padding-bottom:10px;padding-left:10px;">
 <div style="font-family: 'Lato', Tahoma, Verdana, Segoe, sans-serif; font-size: 12px; line-height: 14px; color: #555555;">
-<p style="font-size: 12px; line-height: 14px; margin: 0;">{{ reservation.end_date }}</p>
+<p style="font-size: 12px; line-height: 14px; margin: 0;">{{ resdata.data4 }}</p>
 </div>
 </div>
 <!--[if mso]></td></tr></table><![endif]-->
 <!--[if mso]><table width="100%" cellpadding="0" cellspacing="0" border="0"><tr><td style="padding-right: 10px; padding-left: 10px; padding-top: 10px; padding-bottom: 10px; font-family: Tahoma, Verdana, sans-serif"><![endif]-->
 <div style="color:#555555;font-family:'Lato', Tahoma, Verdana, Segoe, sans-serif;line-height:120%;padding-top:10px;padding-right:10px;padding-bottom:10px;padding-left:10px;">
 <div style="font-family: 'Lato', Tahoma, Verdana, Segoe, sans-serif; font-size: 12px; line-height: 14px; color: #555555;">
-<p style="font-size: 12px; line-height: 14px; margin: 0;">{{ roominfo.number_of_rooms }}</p>
+<p style="font-size: 12px; line-height: 14px; margin: 0;">{{ resdata.data5 }}</p>
 </div>
 </div>
 <!--[if mso]></td></tr></table><![endif]-->
 <!--[if mso]><table width="100%" cellpadding="0" cellspacing="0" border="0"><tr><td style="padding-right: 10px; padding-left: 10px; padding-top: 10px; padding-bottom: 10px; font-family: Tahoma, Verdana, sans-serif"><![endif]-->
 <div style="color:#555555;font-family:'Lato', Tahoma, Verdana, Segoe, sans-serif;line-height:120%;padding-top:10px;padding-right:10px;padding-bottom:10px;padding-left:10px;">
 <div style="font-family: 'Lato', Tahoma, Verdana, Segoe, sans-serif; font-size: 12px; line-height: 14px; color: #555555;">
-<p style="font-size: 12px; line-height: 14px; margin: 0;">{{ roominfo.price }}</p>
+<p style="font-size: 12px; line-height: 14px; margin: 0;">{{ resdata.data6 }}</p>
 </div>
 </div>
 <!--[if mso]></td></tr></table><![endif]-->
@@ -463,7 +463,7 @@
 <div style="border-top:20px solid #ffffff; border-left:0px solid transparent; border-bottom:0px solid transparent; border-right:0px solid transparent; padding-top:0px; padding-bottom:0px; padding-right: 0px; padding-left: 0px;">
 <!--<![endif]-->
 <div align="center" class="img-container center autowidth fullwidth" style="padding-right: 0px;padding-left: 0px;">
-<!--[if mso]><table width="100%" cellpadding="0" cellspacing="0" border="0"><tr style="line-height:0px"><td style="padding-right: 0px;padding-left: 0px;" align="center"><![endif]--><a href="http://example.com" tabindex="-1" target="_blank"> <img align="center" alt="Image" border="0" class="center autowidth fullwidth" src="http://pbgreservation.herokuapp.com{% static 'reservations/images/peace-outside.jpg' %}" style="text-decoration: none; -ms-interpolation-mode: bicubic; height: auto; border: none; width: 100%; max-width: 310px; display: block;" title="Image" width="310"/></a>
+<!--[if mso]><table width="100%" cellpadding="0" cellspacing="0" border="0"><tr style="line-height:0px"><td style="padding-right: 0px;padding-left: 0px;" align="center"><![endif]--><a href="http://peacehotelsom.com" tabindex="-1" target="_blank"> <img align="center" alt="Image" border="0" class="center autowidth fullwidth" src="http://pbgreservation.herokuapp.com{% static 'reservations/images/peace-outside.jpg' %}" style="text-decoration: none; -ms-interpolation-mode: bicubic; height: auto; border: none; width: 100%; max-width: 310px; display: block;" title="Image" width="310"/></a>
 <!--[if mso]></td></tr></table><![endif]-->
 </div>
 <!--[if (!mso)&(!IE)]><!-->

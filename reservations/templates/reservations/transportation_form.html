@@ -40,12 +40,17 @@
 								{{ form.location }}
 							</div>
 							<div class="form-group">
+								<span class="form-label">Number of Guests</span>
+								{{ form.number_of_guests }}
+							</div>
+							<div class="form-group">
 								<span class="form-label">Purpose of Visit</span>
 								{{ form.visit_reason }}
 							</div>
 							<div class="form-btn">
 								<button type="submit" class="submit-btn">Add Reservation</button>
 							</div>
+							{{ form.errors }}
 						</form>
 					</div>
 				</div>

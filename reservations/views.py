@@ -12,7 +12,9 @@ from django.core.mail import BadHeaderError, send_mail, EmailMultiAlternatives
 from django.conf import settings
 from django.template.loader import get_template
 from django.template import Context
+from django.contrib.auth.decorators import login_required
 
+@login_required()
 def index(request):
 	#del request.session['reservations_count']
 	#del request.session['reservations']
@@ -27,11 +29,9 @@ def index(request):
 		vacant_room_count = len(rooms.filter(vacant=True))
 		request.session['rooms'].update({roomtype.name:vacant_room_count})
 	
-	if request.user.is_authenticated:
-		return render(request,'reservations/index.html')
-	else:
-		return redirect('login')
-
+	return render(request,'reservations/index.html')
+	
+@login_required()
 def validate_accom(request,reservation):
 	number_of_guests=reservation['number_of_guests']
 	number_of_rooms=reservation['number_of_rooms']
@@ -43,6 +43,7 @@ def validate_accom(request,reservation):
 	else:
 		return True
 
+@login_required()
 def accomodation(request):
 	if request.method == 'POST':
 		form = AccomodationReservationForm(request.POST)
@@ -88,6 +89,7 @@ def accomodation(request):
 	  form = AccomodationReservationForm()
 	return render(request,'reservations/accomodation_form.html', {'form': form})
 
+@login_required()
 def transportation(request):
 	if request.method == 'POST':
 		form = TransportationReservationForm(request.POST)
@@ -96,7 +98,8 @@ def transportation(request):
 			visit_reason = form.cleaned_data.get('visit_reason')
 			car_type = form.cleaned_data.get('car_type')
 			location = form.cleaned_data.get('location')
-			
+			number_of_guests = form.cleaned_data.get('number_of_guests')
+
 			rescount = request.session.get('reservations_count', 0)
 			rescount = rescount+1
 			request.session['reservations_count'] = rescount
@@ -104,6 +107,7 @@ def transportation(request):
 				'CAR TYPE':car_type,
 				'LOCATION':location,
 				'TRAVEL-DATE':str(date.date()),
+				'TRAVELLERS':number_of_guests
 			}
 			reservation = {
 				'id':rescount,
@@ -111,6 +115,7 @@ def transportation(request):
 				'date':str(date.date()),
 				'visit_reason':visit_reason,
 				'car_type':car_type,
+				'number_of_guests':number_of_guests,
 				'location':location,
 				'todisplay':display_info}
 
@@ -123,6 +128,7 @@ def transportation(request):
 	  form = TransportationReservationForm()
 	return render(request,'reservations/transportation_form.html', {'form': form})
 
+@login_required()
 def security(request):
 	if request.method == 'POST':
 		form = SecurityReservationForm(request.POST)
@@ -131,7 +137,8 @@ def security(request):
 			end_date = form.cleaned_data.get('end_date')
 			comments = form.cleaned_data.get('comments')
 			security_package = form.cleaned_data.get('security_packages')
-			
+			number_of_guests = form.cleaned_data.get('number_of_guests')
+
 			rescount = request.session.get('reservations_count', 0)
 			rescount = rescount+1
 			request.session['reservations_count'] = rescount
@@ -146,6 +153,7 @@ def security(request):
 				'start_date':str(start_date.date()),
 				'end_date':str(end_date.date()),
 				'security_package':str(security_package.id),
+				'number_of_guests':number_of_guests,
 				'comments':comments,
 				'todisplay':display_info}
 
@@ -158,6 +166,7 @@ def security(request):
 	  form = SecurityReservationForm()
 	return render(request,'reservations/security_form.html', {'form': form})
 
+@login_required()
 def conference(request):
 	if request.method == 'POST':
 		form = ConferenceReservationForm(request.POST)
@@ -196,6 +205,7 @@ def conference(request):
 	  form = ConferenceReservationForm()
 	return render(request,'reservations/conference_form.html', {'form': form})
 
+@login_required()
 def bookreservations(request):
 	reservations = request.session.get('reservations')
 	reservationscopy = reservations.copy()
@@ -230,7 +240,7 @@ def bookreservations(request):
 			visit_reason = reservation['visit_reason']
 			car_type=reservation['car_type']
 			number_of_guests=reservation['number_of_guests']
-			ocation=reservation['location']
+			location=reservation['location']
 			made_by = Pbguser.objects.get(pk=request.user.pbguser.id)
 			guest_id = Pbguser.objects.get(pk=request.user.pbguser.id)
 			trans_res = TransportReservation(status='R',start_date=sdate,end_date=edate,purpose_of_visit=visit_reason,
@@ -275,6 +285,7 @@ def bookreservations(request):
 
 	return render(request,'reservations/successfulbooking.html')
 
+@login_required()
 def admindashboard(request,category):
 	accomodation = AccomodationReservation.objects.all()
 	transportation = TransportReservation.objects.all()
@@ -299,16 +310,19 @@ def admindashboard(request,category):
 	reservations = sorted(reservations,key=myfn)
 	return render(request,'reservations/admin/dashboard.html',{'reservations':reservations})
 
+@login_required()
 def userslist(request):
 	users = Pbguser.objects.all()
 
 	return render(request,'reservations/admin/users.html',{'users':users})
 
+@login_required()
 def clientaccount(request,user_id):
 	user = Pbguser.objects.get(pk=user_id)
 
 	return render(request,'reservations/dashboard/clientaccount.html',{'user':user})
 
+@login_required()
 def editreservation(request,category,res_id):
 	if(category=='accomodation'):
 		reservation = AccomodationReservation.objects.select_related().get(pk=res_id)
@@ -328,14 +342,30 @@ def editreservation(request,category,res_id):
 					reservation.status='A'
 					reservation.save()
 					#send email 
+					reslabels={'label1':'CHECK IN',
+						'label2':'CHECK OUT',
+						'label3':'GUESTS',
+						'label4':'ROOM TYPE',
+						'label5':'ROOMS',
+						'label6':'PRICE',
+						'type':'ACCOMODATION'}
+					resdata = {
+						'id':reservation.id,
+						'data1':reservation.start_date,
+						'data2':reservation.end_date,
+						'data3':reservation.number_of_guests,
+						'data4':roominfo.accomodation_type,
+						'data5':roominfo.number_of_rooms,
+						'data6':roominfo.accomodation_type.price
+						}
+					
 					html_message = get_template('reservations/email_reservation_confirmed.html')
-
-					subject = "TEST EMAIL"
-					text_message = "Test email"
-					recepients = ["michaelmulatya@hotmail.com"]
+					subject = "RESERVATION CONFIRMED"
+					text_message = "Your reservation # %s has been approved. We look forward to hosting you."
+					recepients = [reservation.guest_id.user.email]
 					sender = settings.EMAIL_HOST_USER
 					email_msg = EmailMultiAlternatives(subject, text_message, sender, recepients)
-					email_msg.attach_alternative(html_message.render({'reservation':reservation}), "text/html")	
+					email_msg.attach_alternative(html_message.render({'reslabels':reslabels,'resdata':resdata}), "text/html")	
 					email_msg.send()
 
 					msg="Reservation Accepted. A confirmation email has been sent to the guest."
@@ -374,6 +404,29 @@ def editreservation(request,category,res_id):
 			if request.POST.get("btn_approve") and not reservation.status=='A':
 					reservation.status='A'
 					reservation.save()
+
+					reslabels={'label1':'TRAVEL DATE',
+						'label2':'TRAVELLERS',
+						'label3':'CAR TYPE',
+						'label4':'LOCATION',
+						'type':'TRANSPORTATION'}
+					resdata = {
+						'id':reservation.id,
+						'data1':reservation.start_date,
+						'data2':reservation.number_of_guests,
+						'data3':reservation.car_type,
+						'data4':reservation.location
+						}
+					
+					html_message = get_template('reservations/email_reservation_confirmed.html')
+					subject = "RESERVATION CONFIRMED"
+					text_message = "Your reservation # %s has been approved. We look forward to hosting you."
+					recepients = [reservation.guest_id.user.email]
+					sender = settings.EMAIL_HOST_USER
+					email_msg = EmailMultiAlternatives(subject, text_message, sender, recepients)
+					email_msg.attach_alternative(html_message.render({'reslabels':reslabels,'resdata':resdata}), "text/html")	
+					email_msg.send()
+
 					return render(request,'reservations/admin/trans_reservation.html',{'res':reservation,'duration':duration,'success':1,'msg':"Reservation Approved."})
 			elif request.POST.get("btn_reject") and not reservation.status=='D':
 				reservation.status='D'
@@ -396,6 +449,29 @@ def editreservation(request,category,res_id):
 			if request.POST.get("btn_approve") and not reservation.status=='A':
 					reservation.status='A'
 					reservation.save()
+
+					reslabels={'label1':'START DATE',
+						'label2':'END DATE',
+						'label3':'GUESTS',
+						'label4':'SERVICE',
+						'type':'SECURITY'}
+					resdata = {
+						'id':reservation.id,
+						'data1':reservation.start_date,
+						'data2':reservation.end_date,
+						'data3':reservation.number_of_guests,
+						'data4':reservation.security_type
+						}
+					
+					html_message = get_template('reservations/email_reservation_confirmed.html')
+					subject = "RESERVATION CONFIRMED"
+					text_message = "Your reservation # %s has been approved. We look forward to hosting you."
+					recepients = [reservation.guest_id.user.email]
+					sender = settings.EMAIL_HOST_USER
+					email_msg = EmailMultiAlternatives(subject, text_message, sender, recepients)
+					email_msg.attach_alternative(html_message.render({'reslabels':reslabels,'resdata':resdata}), "text/html")	
+					email_msg.send()
+
 					return render(request,'reservations/admin/sec_reservation.html',{'res':reservation,'duration':duration,'success':1,'msg':"Reservation Approved."})
 			elif request.POST.get("btn_reject") and not reservation.status=='D':
 				reservation.status='D'
@@ -417,6 +493,29 @@ def editreservation(request,category,res_id):
 			if request.POST.get("btn_approve") and not reservation.status=='A':
 					reservation.status='A'
 					reservation.save()
+
+					reslabels={'label1':'START DATE',
+						'label2':'END DATE',
+						'label3':'GUESTS',
+						'label4':'HALL',
+						'type':'CONFERENCE'}
+					resdata = {
+						'id':reservation.id,
+						'data1':reservation.start_date,
+						'data2':reservation.end_date,
+						'data3':reservation.number_of_guests,
+						'data4':reservation.conference_hall_id
+						}
+					
+					html_message = get_template('reservations/email_reservation_confirmed.html')
+					subject = "RESERVATION CONFIRMED"
+					text_message = "Your reservation # %s has been approved. We look forward to hosting you."
+					recepients = [reservation.guest_id.user.email]
+					sender = settings.EMAIL_HOST_USER
+					email_msg = EmailMultiAlternatives(subject, text_message, sender, recepients)
+					email_msg.attach_alternative(html_message.render({'reslabels':reslabels,'resdata':resdata}), "text/html")	
+					email_msg.send()
+
 					return render(request,'reservations/admin/conf_reservation.html',{'res':reservation,'duration':duration,'success':1,'msg':"Reservation Approved."})
 			elif request.POST.get("btn_reject") and not reservation.status=='D':
 				reservation.status='D'
@@ -433,9 +532,30 @@ def editreservation(request,category,res_id):
 			return render(request,'reservations/admin/conf_reservation.html',{'res':reservation,'duration':duration})
 	else:
 		return render(request,'reservations/admin/dashboard.html')
-def testemail(request):
-	return render(request,'reservations/email_reservation_confirmed.html')
 
+def testemail(request):
+	reservation = AccomodationReservation.objects.get(pk=2)
+	roominfo = ReservedAccomodation.objects.get(reservation_id=2)
+		
+	reslabels={'label1':'CHECK IN',
+			'label2':'CHECK OUT',
+			'label3':'GUESTS',
+			'label4':'ROOM TYPE',
+			'label5':'ROOMS',
+			'label6':'PRICE'}
+	resdata = {
+			'id':reservation.id,
+			'data1':reservation.start_date,
+			'data2':reservation.end_date,
+			'data3':reservation.number_of_guests,
+			'data4':roominfo.accomodation_type,
+			'data5':roominfo.number_of_rooms,
+			'data6':roominfo.accomodation_type.price
+			}
+
+	return render(request,'reservations/email_reservation_confirmed.html',{'reslabels':reslabels,'resdata':resdata})
+
+@login_required()
 def clientdashboard(request,category):
 	guest = Pbguser.objects.get(pk=request.user.pbguser.id)
 	
@@ -459,6 +579,7 @@ def clientdashboard(request,category):
 
 	return render(request,'reservations/client/dashboard.html',{'reservations':reservations})
 
+@login_required()
 def signup(request):
   if request.method == 'POST':
       form = SignUpForm(request.POST)
@@ -476,6 +597,7 @@ def signup(request):
       form = SignUpForm()
   return render(request, 'registration/signup.html', {'form': form})
 
+@login_required()
 def editprofile(request):
 	if request.method == 'POST':
 		userform = EditUserForm(request.POST,instance=request.user)

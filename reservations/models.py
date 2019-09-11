@@ -79,8 +79,7 @@ class Reservation(models.Model):
 	number_of_guests = models.SmallIntegerField()
 	comments = models.TextField()
 	created_at = models.DateTimeField(auto_now_add=True)
-	class Meta:
-		abstract = True
+	
 
 class AccomodationReservation(Reservation):
 	made_by = models.ForeignKey(Pbguser,related_name='room_made_by',on_delete=models.PROTECT)
@@ -110,7 +109,6 @@ class SecurityReservation(Reservation):
 class ConferenceReservation(Reservation):
 	made_by = models.ForeignKey(Pbguser,related_name='conference_made_by',on_delete=models.PROTECT)
 	guest_id = models.ForeignKey(Pbguser,related_name='conference_guest_id',on_delete=models.PROTECT)
-	number_of_guests = models.SmallIntegerField()
 	conference_hall_id = models.ForeignKey(ConferenceHall,on_delete=models.PROTECT)
 	def gettype(self):
 		return "conference"

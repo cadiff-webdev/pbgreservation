@@ -90,4 +90,9 @@ const BASE_DIR = window.location.origin;
         }
     })
 
+    $('.datetimepicker-input').on('click'),function(e){
+        e.preventDefault()
+        alert(2)
+    }
+
 })(jQuery);
