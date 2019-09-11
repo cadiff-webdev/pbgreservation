@@ -564,10 +564,13 @@ def testemail(request):
 	# return render(request,'reservations/email_reservation_confirmed.html',{'reslabels':reslabels,'resdata':resdata})
 	user = Pbguser.objects.get(user__username="latts").user	
 	current_site = get_current_site(request)
-         
+	uid = urlsafe_base64_encode(force_bytes(user.pk))
+	if not isinstance(uid, str):
+		uid = uid.decode()
+       
 	return render(request,'reservations/email_account_activation.html',{'user':user,
           	'domain':current_site,
-            'uid':urlsafe_base64_encode(force_bytes(user.pk)).decode(),
+            'uid':uid,
             'token':account_activation_token.make_token(user)})
 
 @login_required()
@@ -626,10 +629,14 @@ def signup(request):
           recepients = [form.cleaned_data.get('email')]
           sender = settings.EMAIL_HOST_USER
           email_msg = EmailMultiAlternatives(subject, text_message, sender, recepients)
+          uid = urlsafe_base64_encode(force_bytes(user.pk))
+          if not isinstance(uid, str):
+          	uid = uid.decode()
+
           email_msg.attach_alternative(html_message.render({
           	'user':user,
           	'domain':current_site,
-            'uid':urlsafe_base64_encode(force_bytes(user.pk)).decode(),
+            'uid':uid,
             'token':account_activation_token.make_token(user),
            }), "text/html")
           email_msg.send()  

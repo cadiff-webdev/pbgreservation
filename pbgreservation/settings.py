@@ -141,9 +141,9 @@ STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'cloud.hotelplus.net'
+EMAIL_HOST = 'az1-ss19.a2hosting.com'
 EMAIL_USE_SSL = True
-EMAIL_PORT = 456
-EMAIL_HOST_USER = 'pbgreservation@hotelplus.net'
-EMAIL_HOST_PASSWORD = 'n5h4Hs%1'
+EMAIL_PORT = 465
+EMAIL_HOST_USER = 'pbg@pbgtest.kilelehomestay.com'
+EMAIL_HOST_PASSWORD = 'muratina13'
 
