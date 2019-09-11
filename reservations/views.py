@@ -567,7 +567,7 @@ def testemail(request):
          
 	return render(request,'reservations/email_account_activation.html',{'user':user,
           	'domain':current_site,
-            'uid':urlsafe_base64_encode(force_bytes(user.pk)),
+            'uid':urlsafe_base64_encode(force_bytes(user.pk)).decode(),
             'token':account_activation_token.make_token(user)})
 
 @login_required()
@@ -629,7 +629,7 @@ def signup(request):
           email_msg.attach_alternative(html_message.render({
           	'user':user,
           	'domain':current_site,
-            'uid':urlsafe_base64_encode(force_bytes(user.pk)),
+            'uid':urlsafe_base64_encode(force_bytes(user.pk)).decode(),
             'token':account_activation_token.make_token(user),
            }), "text/html")
           email_msg.send()  
