@@ -6,9 +6,6 @@ header,main{
   width: 90%;
 	padding: 3rem 1.5rem;
 }
-main{
-	padding-top:1.5rem;
-}
 .header {
   line-height: 1;
   border-bottom: 1px solid #e5e5e5;
