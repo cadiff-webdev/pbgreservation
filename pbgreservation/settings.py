@@ -140,10 +140,13 @@ STATICFILES_DIRS = (
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 
+
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'az1-ss19.a2hosting.com'
+EMAIL_HOST = 'mail.peacehotelsom.com'
 EMAIL_USE_SSL = True
 EMAIL_PORT = 465
-EMAIL_HOST_USER = 'pbg@pbgtest.kilelehomestay.com'
-EMAIL_HOST_PASSWORD = 'muratina13'
+EMAIL_HOST_USER = 'bookings@peacehotelsom.com'
+EMAIL_HOST_PASSWORD = 'H)u?G?MpI_c3'
+
+
 
