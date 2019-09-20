@@ -1,34 +1,69 @@
 {% extends "reservations/base.html" %}
 {% block title %}PBG Homepage{% endblock%}
-
+{% load static %}
 
 {% block content %}
-
-<div class="container">
-	<div class="row">
-		<div class="col-md-5 m-4 service-category service-accomodation" data-url="{% url 'reservations:accomodationform' %}">
-			<div class="transbox">
-				<h2>ACCOMODATION</h2>
+  <div class="album py-5 bg-light">
+    <div class="container">
+      <div class="row">
+    	  <div class="col-md-6">
+            <div class="card mb-4 box-shadow">
+              <img class="card-img-top" src="{% static 'reservations/images/standard-room.jpg' %}" alt="accomodation">
+              <div class="card-body">
+            		<h4>ACCOMODATION</h4>
+                <div class="d-flex justify-content-between align-items-center">
+                  <div class="btn-group">
+                    <button type="button" class="btn btn-sm btn-outline-secondary">View Rooms</button>
+                    <button type="button" class="btn btn-sm btn-outline-secondary btn-bookroom" data-url="{% url 'reservations:accomodationform' %}">Book A Room</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="card mb-4 box-shadow">
+              <img class="card-img-top" src="{% static 'reservations/images/transportation-vehicle.jpg' %}" alt="Card image cap">
+              <div class="card-body">
+            		<h4>TRANSPORTATION</h4>
+                <div class="d-flex justify-content-between align-items-center">
+                  <div class="btn-group">
+                    <button type="button" class="btn btn-sm btn-outline-secondary">View Services</button>
+                    <button type="button" class="btn btn-sm btn-outline-secondary btn-bookroom" data-url="{% url 'reservations:transportationform' %}">Book A Ride</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="card mb-4 box-shadow">
+              <img class="card-img-top" src="{% static 'reservations/images/conference-hall.png' %}" alt="Card image cap">
+              <div class="card-body">
+            		<h4>CONFERENCE</h4>
+                <div class="d-flex justify-content-between align-items-center">
+                  <div class="btn-group">
+                    <button type="button" class="btn btn-sm btn-outline-secondary">View Halls</button>
+                    <button type="button" class="btn btn-sm btn-outline-secondary btn-bookroom" data-url="{% url 'reservations:conferenceform' %}">Book A Hall</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="card mb-4 box-shadow">
+              <img class="card-img-top" src="{% static 'reservations/images/land-security.jpg' %}" alt="Card image cap">
+              <div class="card-body">
+            		<h4>SECURITY</h4>
+                <div class="d-flex justify-content-between align-items-center">
+                  <div class="btn-group">
+                    <button type="button" class="btn btn-sm btn-outline-secondary">View Rooms</button>
+                    <button type="button" class="btn btn-sm btn-outline-secondary btn-bookroom" data-url="{% url 'reservations:securityform' %}">Book A Room</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
 			</div>
 		</div>
-		<div class="col-md-5 m-4 service-category service-transportation" data-url="{% url 'reservations:transportationform' %}">
-			<div class="transbox">
-				<h2>TRANSPORTATION</h2>
-			</div>
-		</div>
-		
 	</div>
-	<div class="row">
-		<div class="col-md-5 m-4 service-category service-conference" data-url="{% url 'reservations:conferenceform' %}">
-			<div class="transbox">
-				<h2>CONFERENCES</h2>
-			</div>
-		</div>
-		<div class="col-md-5 m-4 service-category service-security" data-url="{% url 'reservations:securityform' %}">
-			<div class="transbox">
-				<h2>SECURITY</h2>
-			</div>
-		</div>
-	</div>
-</div>
+	
 {% endblock %}

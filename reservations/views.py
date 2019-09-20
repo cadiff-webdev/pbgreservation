@@ -22,7 +22,6 @@ from django.http import HttpResponse
 def index(request):
 	#del request.session['reservations_count']
 	#del request.session['reservations']
-	
 	request.session['rooms']={}
 	rooms = Accomodation.objects.all()
 	roomtypes = AccomodationType.objects.all()
@@ -41,11 +40,11 @@ def validate_accom(request,reservation):
 	number_of_rooms=reservation['number_of_rooms']
 	accomodation_type=reservation['accomodation_type']
 	room_availability=request.session.get('rooms')
-	availability = int(room_availability[accomodation_type])
-	if number_of_rooms > availability:
-		return False
-	else:
-		return True
+	if accomodation_type in room_availability:
+		availability = int(room_availability[accomodation_type])
+		if number_of_rooms > availability:
+			return True
+	return False
 
 @login_required()
 def accomodation(request):
@@ -62,7 +61,7 @@ def accomodation(request):
 
 			rescount = request.session.get('reservations_count', 0)
 			rescount = rescount+1
-			request.session['reservations_count'] = rescount
+			
 			display_info = {
 				'GUESTS':number_of_guests,
 				'ROOMS':number_of_rooms,
@@ -80,10 +79,13 @@ def accomodation(request):
 				'accomodation_type':str(accomodation_type),
 				'branch':branch.id,
 				'todisplay':display_info}
+			
 			vd=validate_accom(request,reservation)
 			if not vd:
-				raise forms.ValidationError("Not enough rooms")
+				return render(request,'reservations/accomodation_form.html', {'form': form,'roomerror':1})
 
+			request.session['reservations_count'] = rescount
+			
 			if not request.session.get('reservations'):
 				request.session['reservations']={}
 			request.session['reservations'].update({rescount:reservation})
@@ -214,6 +216,7 @@ def bookreservations(request):
 	reservations = request.session.get('reservations')
 	reservationscopy = reservations.copy()
 	rescount = request.session.get('reservations_count')
+	emailbody = []
 
 	for key,reservation in reservations.items():
 		if reservation['type'] == "accomodation":
@@ -234,6 +237,24 @@ def bookreservations(request):
 			reserved = ReservedAccomodation(reservation_id=accom_res,branch_id=branch,number_of_rooms=number_of_rooms,
 				accomodation_type=accomodation_type)
 			reserved.save()
+			#Add to email body 
+			reslabels={'label1':'CHECK IN',
+						'label2':'CHECK OUT',
+						'label3':'GUESTS',
+						'label4':'ROOM TYPE',
+						'label5':'ROOMS',
+						'label6':'PRICE' }
+			resdata = {
+						'id':resid,
+						'data1':sdate,
+						'data2':edate,
+						'data3':number_of_guests,
+						'data4':accomodation_type,
+						'data5':number_of_rooms,
+						'data6':accomodation_type.price }
+			email_res={'type':'Accomodation','labels':reslabels,'data':resdata}
+			emailbody.append(email_res)
+			
 			request.session['reservations_count']=rescount-1
 			reservationscopy.pop(key)
 
@@ -250,6 +271,25 @@ def bookreservations(request):
 			trans_res = TransportReservation(status='R',start_date=sdate,end_date=edate,purpose_of_visit=visit_reason,
 				made_by=made_by,guest_id=guest_id,location=location,number_of_guests=number_of_guests)
 			trans_res.save()
+			
+			#Add to email body
+			reslabels={'label1':'DATE',
+						'label2':'GUESTS',
+						'label3':'CAR TYPE',
+						'label4':'LOCATION',
+						'label5':'PURPOSE',
+						'label6':'' }
+			resdata = {
+						'id':resid,
+						'data1':sdate,
+						'data2':number_of_guests,
+						'data3':car_type,
+						'data4':location,
+						'data5':visit_reason,
+						'data6':0 }
+			email_res={'type':'Transportation','labels':reslabels,'data':resdata}
+			emailbody.append(email_res)
+
 			request.session['reservations_count']=rescount-1
 			reservationscopy.pop(key)
 		
@@ -266,6 +306,25 @@ def bookreservations(request):
 			trans_res = ConferenceReservation(status='R',start_date=sdate,end_date=edate,conference_hall_id=hall,
 				made_by=made_by,guest_id=guest_id,comments=comments,number_of_guests=number_of_guests)
 			trans_res.save()
+
+			#Add to email body
+			reslabels={'label1':'DATE',
+						'label2':'GUESTS',
+						'label3':'HALL',
+						'label4':'COMMENTS',
+						'label5':'',
+						'label6':'' }
+			resdata = {
+						'id':resid,
+						'data1':sdate,
+						'data2':number_of_guests,
+						'data3':hall,
+						'data4':comments,
+						'data5':0,
+						'data6':0 }
+			email_res={'type':'Conference','labels':reslabels,'data':resdata}
+			emailbody.append(email_res)
+
 			request.session['reservations_count']=rescount-1
 			reservationscopy.pop(key)	
 	
@@ -281,11 +340,42 @@ def bookreservations(request):
 			sec_res = SecurityReservation(status='R',start_date=sdate,end_date=edate,security_type=security_package,
 				made_by=made_by,guest_id=guest_id,comments=comments,number_of_guests=number_of_guests)
 			sec_res.save()
+
+			#Add to email body
+			reslabels={'label1':'START DATE',
+						'label2':'END DATE',
+						'label3':'GUESTS',
+						'label4':'PACKAGE',
+						'label5':'',
+						'label6':'' }
+			resdata = {
+						'id':resid,
+						'data1':sdate,
+						'data2':edate,
+						'data3':number_of_guests,
+						'data4':security_package,
+						'data5':0,
+						'data6':0 }
+			email_res={'type':'Security','labels':reslabels,'data':resdata}
+			emailbody.append(email_res)
+
 			request.session['reservations_count']=rescount-1
 			reservationscopy.pop(key)	
 
 	request.session['reservations'] = reservationscopy
 	request.session['reservations_count'] = 0
+
+	#Send email 
+	current_site = get_current_site(request)
+  
+	html_message = get_template('reservations/email_reservation_confirmed.html')
+	subject = "NEW BOOKING"
+	text_message = "A new reservation has been made.Further details in admin dashboard."
+	recepients = ["michaelmulatz@gmail.com"]
+	sender = settings.EMAIL_HOST_USER
+	email_msg = EmailMultiAlternatives(subject, text_message, sender, recepients)
+	email_msg.attach_alternative(html_message.render({'reservations':emailbody,'domain':current_site}), "text/html")	
+	email_msg.send()
 
 	return render(request,'reservations/successfulbooking.html')
 
@@ -542,36 +632,40 @@ def editreservation(request,category,res_id):
 		return render(request,'reservations/admin/dashboard.html')
 
 def testemail(request):
-	# reservation = AccomodationReservation.objects.get(pk=2)
-	# roominfo = ReservedAccomodation.objects.get(reservation_id=2)
+	user = Pbguser.objects.get(user__username="peace")
+	
+	reservation = AccomodationReservation.objects.get(pk=1)
+	roominfo = ReservedAccomodation.objects.get(reservation_id=1)
 		
-	# reslabels={'label1':'CHECK IN',
-	# 		'label2':'CHECK OUT',
-	# 		'label3':'GUESTS',
-	# 		'label4':'ROOM TYPE',
-	# 		'label5':'ROOMS',
-	# 		'label6':'PRICE'}
-	# resdata = {
-	# 		'id':reservation.id,
-	# 		'data1':reservation.start_date,
-	# 		'data2':reservation.end_date,
-	# 		'data3':reservation.number_of_guests,
-	# 		'data4':roominfo.accomodation_type,
-	# 		'data5':roominfo.number_of_rooms,
-	# 		'data6':roominfo.accomodation_type.price
-	# 		}
+	reslabels={'label1':'CHECK IN',
+			'label2':'CHECK OUT',
+			'label3':'GUESTS',
+			'label4':'ROOM TYPE',
+			'label5':'ROOMS',
+			'label6':'PRICE'}
+	resdata = {
+			'id':reservation.id,
+			'data1':reservation.start_date,
+			'data2':reservation.end_date,
+			'data3':reservation.number_of_guests,
+			'data4':roominfo.accomodation_type,
+			'data5':roominfo.number_of_rooms,
+			'data6':roominfo.accomodation_type.price }
 
-	# return render(request,'reservations/email_reservation_confirmed.html',{'reslabels':reslabels,'resdata':resdata})
-	user = Pbguser.objects.get(user__username="latts").user	
-	current_site = get_current_site(request)
-	uid = urlsafe_base64_encode(force_bytes(user.pk))
-	if not isinstance(uid, str):
-		uid = uid.decode()
+	r={'type':'Accomodation','labels':reslabels,'data':resdata}
+	res=[]
+	res.append(r)
+	#return render(request,'reservations/email_reservation_confirmed.html',{'reslabels':reslabels,'resdata':resdata,'user':user})
+	return render(request,'reservations/email_new_reservation.html',{'reservations':res,'user':user})
+	# current_site = get_current_site(request)
+	# uid = urlsafe_base64_encode(force_bytes(user.pk))
+	# if not isinstance(uid, str):
+	# 	uid = uid.decode()
        
-	return render(request,'reservations/email_account_activation.html',{'user':user,
-          	'domain':current_site,
-            'uid':uid,
-            'token':account_activation_token.make_token(user)})
+	# return render(request,'reservations/email_account_activation.html',{'user':user,
+ #          	'domain':current_site,
+ #            'uid':uid,
+ #            'token':account_activation_token.make_token(user)})
 
 @login_required()
 def clientdashboard(request,category):

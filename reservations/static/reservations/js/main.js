@@ -75,7 +75,7 @@ const BASE_DIR = window.location.origin;
     }
     
 
-    $('.service-category').on('click',function(){
+    $('.btn-bookroom').on('click',function(){
       window.location.href=BASE_DIR+this.dataset['url']
     })
 

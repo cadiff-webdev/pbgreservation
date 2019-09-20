@@ -43,18 +43,26 @@
 </head>
 
 <body>
-	<header class="header py-3 fixed-top">
-    <div class="row flex-nowrap justify-content-between align-items-center">
-      <div class="col-2 ml-2">
-        <img class="logo-image" src="{% static 'reservations/images/pbglogo.mini.png' %}">
-      </div>
-      <div class="col-10 text-center">
-        <a class="header-logo text-dark" href="{% url 'reservations:index' %}">PBG BOOKING PORTAL</a>
-      </div>
-    
+	<header class="masthead mb-auto">
+    <div class="inner">
+      <img class="masthead-img" src="{% static 'reservations/images/pbglogo.mini.png' %}">
+			<h3 class="masthead-brand">PBG ONLINE BOOKING</h3>
+      <nav class="nav nav-masthead justify-content-center">
+        <a class="nav-link active"  href="{% url 'reservations:index' %}">Home</a>
+        {% if user.is_staff %}
+		    	<a class="nav-link" href="{% url 'reservations:admindashboard' 'all' %}">Admin</a>
+		    {% else %}
+		    	<a class="nav-link" href="{% url 'reservations:clientdashboard' 'all' %}">Dashboard</a>
+		    {% endif %}
+        <a class="nav-link" href="#">Logout</a>
+      </nav>
     </div>
   </header>
 
+  </header>
+  
+ 
+      
   <main role="main" class="container">
 		<div class="row">
        <div class="col-md-9">
@@ -67,23 +75,7 @@
 		  </div>
 		  <div class="col-md-3 mb-4">
   			<div  class="" id="sidebar">
-  				  <div class="col-12 d-flex justify-content-end align-items-center">
-			      {% block sidelinks %}
-			       <nav aria-label="breadcrumb">
-						  <ol class="breadcrumb">
-						  	{% if user.is_staff %}
-						    <li class="breadcrumb-item"><a href="{% url 'reservations:admindashboard' 'all' %}">Admin</a></li>
-						    {% else %}
-						    <li class="breadcrumb-item"><a href="{% url 'reservations:clientdashboard' 'all' %}">Dashboard</a></li>
-						    {% endif %}
-						    <li class="breadcrumb-item active" aria-current="page"><a href="{% url 'logout' %}">Logout</a></li>
-						  </ol>
-						</nav>
-			      {% endblock %}
-			      </div>
-			  
-
-				  {% block sidebar %}
+  				{% block sidebar %}
 					  <h4>Reservations{% if request.session.reservations_count > 0 %}
 						  ({{ request.session.reservations_count }})</h4>
 						{% endif %}
