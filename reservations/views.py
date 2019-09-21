@@ -368,7 +368,7 @@ def bookreservations(request):
 	#Send email 
 	current_site = get_current_site(request)
   
-	html_message = get_template('reservations/email_reservation_confirmed.html')
+	html_message = get_template('reservations/email_new_reservation.html')
 	subject = "NEW BOOKING"
 	text_message = "A new reservation has been made.Further details in admin dashboard."
 	recepients = ["michaelmulatz@gmail.com"]
