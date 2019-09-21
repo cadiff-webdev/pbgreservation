@@ -37,12 +37,12 @@ def index(request):
 @login_required()
 def validate_accom(request,reservation):
 	number_of_guests=reservation['number_of_guests']
-	number_of_rooms=reservation['number_of_rooms']
+	number_of_rooms=int(reservation['number_of_rooms'])
 	accomodation_type=reservation['accomodation_type']
 	room_availability=request.session.get('rooms')
 	if accomodation_type in room_availability:
 		availability = int(room_availability[accomodation_type])
-		if number_of_rooms > availability:
+		if availability >= number_of_rooms:
 			return True
 	return False
 
@@ -82,7 +82,9 @@ def accomodation(request):
 			
 			vd=validate_accom(request,reservation)
 			if not vd:
-				return render(request,'reservations/accomodation_form.html', {'form': form,'roomerror':1})
+				t = request.session.get('rooms')
+				e_msg="Error: There are only %d %ss available " %(t[str(accomodation_type)],accomodation_type)
+				return render(request,'reservations/accomodation_form.html', {'form': form,'roomerror':e_msg})
 
 			request.session['reservations_count'] = rescount
 			
@@ -286,7 +288,7 @@ def bookreservations(request):
 						'data3':car_type,
 						'data4':location,
 						'data5':visit_reason,
-						'data6':0 }
+						'data6':'' }
 			email_res={'type':'Transportation','labels':reslabels,'data':resdata}
 			emailbody.append(email_res)
 
@@ -320,8 +322,8 @@ def bookreservations(request):
 						'data2':number_of_guests,
 						'data3':hall,
 						'data4':comments,
-						'data5':0,
-						'data6':0 }
+						'data5':'',
+						'data6':'' }
 			email_res={'type':'Conference','labels':reslabels,'data':resdata}
 			emailbody.append(email_res)
 
@@ -354,8 +356,8 @@ def bookreservations(request):
 						'data2':edate,
 						'data3':number_of_guests,
 						'data4':security_package,
-						'data5':0,
-						'data6':0 }
+						'data5':'',
+						'data6':'' }
 			email_res={'type':'Security','labels':reslabels,'data':resdata}
 			emailbody.append(email_res)
 
@@ -369,9 +371,9 @@ def bookreservations(request):
 	current_site = get_current_site(request)
   
 	html_message = get_template('reservations/email_new_reservation.html')
-	subject = "NEW BOOKING"
+	subject = "NEW BOOKING(S) %s" %(datetime.datetime.now().strftime("%Y-%m-%d"))
 	text_message = "A new reservation has been made.Further details in admin dashboard."
-	recepients = ["michaelmulatz@gmail.com"]
+	recepients = ["reservations@peacebusinessgroup.com"]
 	sender = settings.EMAIL_HOST_USER
 	email_msg = EmailMultiAlternatives(subject, text_message, sender, recepients)
 	email_msg.attach_alternative(html_message.render({'reservations':emailbody,'domain':current_site}), "text/html")	
@@ -455,7 +457,7 @@ def editreservation(request,category,res_id):
 					current_site = get_current_site(request)
   
 					html_message = get_template('reservations/email_reservation_confirmed.html')
-					subject = "RESERVATION CONFIRMED"
+					subject = "ACCOMODATION RESERVATION CONFIRMED"
 					text_message = "Your reservation # %s has been approved. We look forward to hosting you."
 					recepients = [reservation.guest_id.user.email]
 					sender = settings.EMAIL_HOST_USER
@@ -515,7 +517,7 @@ def editreservation(request,category,res_id):
 					current_site = get_current_site(request)
   
 					html_message = get_template('reservations/email_reservation_confirmed.html')
-					subject = "RESERVATION CONFIRMED"
+					subject = "TRANSPORT RESERVATION CONFIRMED"
 					text_message = "Your reservation # %s has been approved. We look forward to hosting you."
 					recepients = [reservation.guest_id.user.email]
 					sender = settings.EMAIL_HOST_USER
@@ -561,7 +563,7 @@ def editreservation(request,category,res_id):
 					
 					current_site = get_current_site(request)
 					html_message = get_template('reservations/email_reservation_confirmed.html')
-					subject = "RESERVATION CONFIRMED"
+					subject = "SECURITY RESERVATION CONFIRMED"
 					text_message = "Your reservation # %s has been approved. We look forward to hosting you."
 					recepients = [reservation.guest_id.user.email]
 					sender = settings.EMAIL_HOST_USER
@@ -586,6 +588,7 @@ def editreservation(request,category,res_id):
 	elif(category=='conference'):
 		reservation = get_object_or_404(ConferenceReservation,pk=res_id)
 		duration = reservation.start_date - reservation.end_date
+		duration = duration.days +1
 		if request.method == 'POST':
 			if request.POST.get("btn_approve") and not reservation.status=='A':
 					reservation.status='A'
@@ -606,7 +609,7 @@ def editreservation(request,category,res_id):
 					current_site = get_current_site(request)
   
 					html_message = get_template('reservations/email_reservation_confirmed.html')
-					subject = "RESERVATION CONFIRMED"
+					subject = "CONFERENCE RESERVATION CONFIRMED"
 					text_message = "Your reservation # %s has been approved. We look forward to hosting you."
 					recepients = [reservation.guest_id.user.email]
 					sender = settings.EMAIL_HOST_USER

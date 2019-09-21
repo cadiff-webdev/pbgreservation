@@ -72,8 +72,8 @@
                                     <td>{{ res.number_of_guests }}</td>
                                     <td>{{ duration }}</td>
                                     <td>{{ res.conference_hall_id }}</td>
-                                    <td class="text-right">$999.00</td>
-                                    <td class="text-right">$999.00</td>
+                                    <td class="text-right">{{ res.conference_hall_id.price }}</td>
+                                    <td class="text-right">{% widthratio res.conference_hall_id.price 1 duration %}</td>
                                 </tr>
                             </tbody>
                         </table>
@@ -106,11 +106,6 @@
                         <div class="row form-group">
                             <button type="submit" name="btn_cancel" class="btn btn-warning col-md-12" value="1">
                                 <i class="fa fa-times"></i> Cancel
-                            </button>
-                        </div>
-                        <div class="row form-group">
-                            <button type="submit" class="btn btn-info col-md-12">
-                                <i class="fa fa-envelope"></i> Email Details
                             </button>
                         </div>
                         <div class="row form-group">

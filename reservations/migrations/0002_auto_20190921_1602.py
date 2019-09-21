@@ -4,27 +4,23 @@ from django.db import migrations
 
 def populate_branches(apps,schema_editor):
 	Branch = apps.get_model('reservations','Branch')
-	if not Branch.objects.get(name="Peace 1"):
-		b=Branch.objects.create(name='Peace 1')
-		b1.save()
-		b=Branch.objects.create(name='Peace 2')
-		b2.save()
-
+	if not Branch.objects.filter(name="Peace 1").exists():
+		b1=Branch.objects.create(name='Peace 1')
+		b2=Branch.objects.create(name='Peace 2')
+	
 
 def populate_room_types(apps,schema_editor):
 	AccomodationType = apps.get_model('reservations','AccomodationType')
-	if not AccomodationType.objects.get(name="Deluxe Room"):
+	if not AccomodationType.objects.filter(name="Deluxe Room").exists():
 		acc1=AccomodationType.objects.create(name='Deluxe Room',
 			description="Ensuite bathroom with a refreshing rainshower and a spacious executive workspace.",
 			price='145',
 			capacity='2')
-		acc1.save()
 		acc2=AccomodationType.objects.create(name='Executive Room',
 			description="Modern designed room with great entertainment options,with access to exclusive Peace Hotel Club privileges.",
 			capacity='2',
 			price='130')
-		acc2.save()
-
+	
 def populate_rooms(apps,schema_editor):
 	Branch = apps.get_model('reservations','Branch')
 	b1=Branch.objects.get(pk=1)
@@ -34,6 +30,16 @@ def populate_rooms(apps,schema_editor):
 	Room = apps.get_model('reservations','Accomodation')
 	r1 = Room.objects.create(branch_id=b1,accomodation_type=dlxroom,description='RoomOne',vacant=True,room_number='room1')
 	r2 = Room.objects.create(branch_id=b1,accomodation_type=stdroom,description='RoomTwo',vacant=True,room_number='room2')
+
+def populate_halls(apps,schema_editor):
+	Branch = apps.get_model('reservations','Branch')
+	b1=Branch.objects.get(pk=1)
+	ConferenceHall = apps.get_model('reservations','ConferenceHall')
+	h1 = ConferenceHall.objects.create(branch_id=b1,name="Hakaba VIP Room")
+
+def populate_security_services(apps,schema_editor):
+	SecurityService = apps.get_model('reservations','SecurityService')
+	s1 = SecurityService.objects.create(description="Site-based security to protect people and assets",name="Ground Security")
 
 class Migration(migrations.Migration):
 
@@ -45,4 +51,6 @@ class Migration(migrations.Migration):
     	migrations.RunPython(populate_branches),
     	migrations.RunPython(populate_room_types),
     	migrations.RunPython(populate_rooms),
+    	migrations.RunPython(populate_halls),
+    	migrations.RunPython(populate_security_services),
     ]

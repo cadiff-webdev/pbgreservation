@@ -33,15 +33,15 @@ class AccomodationReservationForm(forms.Form):
 
 
 	extra_attrs={}
-	rooms = Accomodation.objects.all()
-	roomtypes = AccomodationType.objects.all()
+	# rooms = Accomodation.objects.all()
+	# roomtypes = AccomodationType.objects.all()
 	
-	for roomtype in roomtypes:
-		rooms = rooms.filter(accomodation_type__name__exact=roomtype.name)
-		total_room_count = len(rooms)
-		vacant_room_count = len(rooms.filter(vacant=True))
+	# for roomtype in roomtypes:
+	# 	rooms = rooms.filter(accomodation_type__name__exact=roomtype.name)
+	# 	total_room_count = len(rooms)
+	# 	vacant_room_count = len(rooms.filter(vacant=True))
 
-		extra_attrs.update({'data-vacant-'+roomtype.name.replace(" ",""):vacant_room_count})
+	# 	extra_attrs.update({'data-vacant-'+roomtype.name.replace(" ",""):vacant_room_count})
 
 	extra_attrs.update({'class':'form-control'})
 	accomodation_type =  forms.ModelChoiceField(AccomodationType.objects.all(),label='ROOM TYPE')

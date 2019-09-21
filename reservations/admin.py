@@ -7,4 +7,5 @@ admin.site.register(Accomodation)
 admin.site.register(AccomodationType)
 admin.site.register(ConferenceHall)
 admin.site.register(SecurityService)
+admin.site.register(AccomodationReservation)
 

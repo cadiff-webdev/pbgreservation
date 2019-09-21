@@ -68,6 +68,8 @@ class ConferenceHall(models.Model):
 	width_in_meters = models.SmallIntegerField('width',default=0)
 	length_in_meters = models.SmallIntegerField('length',default=0)
 	branch_id = models.ForeignKey(Branch,on_delete=models.PROTECT)
+	price = models.DecimalField(default=0.00,decimal_places=2,max_digits=5)
+	
 	def __str__(self):
 		return self.name
 

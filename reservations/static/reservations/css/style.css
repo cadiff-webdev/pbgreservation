@@ -73,6 +73,9 @@ main{
   .masthead-brand {
     float: left;
   }
+  .masthead-brand-right {
+    float: right;
+  }
   .nav-masthead {
     float: right;
   }
