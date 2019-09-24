@@ -147,6 +147,10 @@ EMAIL_USE_SSL = True
 EMAIL_PORT = 465
 EMAIL_HOST_USER = 'bookings@peacehotelsom.com'
 EMAIL_HOST_PASSWORD = 'H)u?G?MpI_c3'
+#EMAIL_ALL_RESERVATIONS_MANAGER='reservations@peacebusinessgroup.com'
+EMAIL_ALL_RESERVATIONS_MANAGER='michaelmulatz@gmail.com'
+EMAIL_TRANSPORT_RESERVATIONS_MANAGER='transport@peacebusinessgroup.com'
+
 
 
 

@@ -373,7 +373,7 @@ def bookreservations(request):
 	html_message = get_template('reservations/email_new_reservation.html')
 	subject = "NEW BOOKING(S) %s" %(datetime.datetime.now().strftime("%Y-%m-%d"))
 	text_message = "A new reservation has been made.Further details in admin dashboard."
-	recepients = ["reservations@peacebusinessgroup.com"]
+	recepients = [settings.EMAIL_ALL_RESERVATIONS_MANAGER]
 	sender = settings.EMAIL_HOST_USER
 	email_msg = EmailMultiAlternatives(subject, text_message, sender, recepients)
 	email_msg.attach_alternative(html_message.render({'reservations':emailbody,'domain':current_site}), "text/html")	

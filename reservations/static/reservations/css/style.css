@@ -119,7 +119,7 @@ main{
 	background-image: url('../images/transportation-vehicle.jpg');
 }
 #conference_form_bg{
-	background-image: url('../images/conference-hall.png');
+	background-image: url('../images/conference-hall.jpg');
 }
 #security_form_bg{
 	background-image: url('../images/security-packages.jpg');
@@ -279,7 +279,7 @@ main{
 	background-image: url('../images/transportation-vehicle.jpg');
 }
 .service-conference{
-	background-image: url('../images/conference-hall.png');
+	background-image: url('../images/conference-hall.jpg');
 }
 .service-security{
 	background-image: url('../images/land-security.jpg');
